@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: Everrock Write
+  repo: victorayooluwa31-bit/everrockwrite
   branch: main
 
 media_folder: static/uploads
