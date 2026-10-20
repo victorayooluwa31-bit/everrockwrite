@@ -1,0 +1,73 @@
+backend:
+  name: github
+  repo: victorayooluwa31-bit/everrockwrite
+  branch: main
+
+media_folder: static/uploads
+public_folder: /uploads
+
+collections:
+  - name: posts
+    label: Posts
+    label_singular: Post
+    folder: content/posts
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    summary: "{{title}}"
+    editor:
+      preview: false
+    fields:
+      - { label: Title, name: title, widget: string }
+      - label: Category
+        name: category
+        widget: select
+        options: ["Word from God", "Poem", "Life & Fictional Story"]
+        hint: "Decides which page this post appears on."
+      - { label: Publish date, name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: Summary, name: summary, widget: text, hint: "One or two sentences shown on the home page and in share previews." }
+      - { label: Tags, name: tags, widget: list, required: false, hint: "Type a tag and press Enter. Posts with shared tags are suggested as related reading." }
+      - { label: Cover image, name: image, widget: image, required: false }
+      - { label: Draft (hide from site), name: draft, widget: boolean, default: false, required: false }
+      - { label: Body, name: body, widget: markdown }
+
+  - name: pages
+    label: Pages
+    editor:
+      preview: false
+    files:
+      - label: About
+        name: about
+        file: content/pages/about.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Body, name: body, widget: markdown }
+      - label: Privacy Policy
+        name: privacy
+        file: privacy.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Body, name: body, widget: markdown }
+      - label: Copyright and Ownership
+        name: copyright
+        file: copyright.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Body, name: body, widget: markdown }
+
+  - name: settings
+    label: Site settings
+    editor:
+      preview: false
+    files:
+      - label: Site settings
+        name: site
+        file: site.json
+        fields:
+          - { label: Site name, name: title, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Author or owner name (footer), name: author, widget: string }
+          - { label: Hero heading (home page), name: hero_heading, widget: string }
+          - { label: Hero text (home page), name: hero_text, widget: text }
+          - { label: Website address, name: url, widget: string, hint: "For example https://everrockwrite.netlify.app (no slash at the end). Needed for the RSS feed and share previews." }
+          - { label: GoatCounter code, name: goatcounter, widget: string, required: false, hint: "The part before .goatcounter.com. Leave empty to hide view counts." }
