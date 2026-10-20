@@ -1,12 +1,14 @@
 {
-  "hero_heading": "Words with purpose.",
-  "hero_text": "Reflections from the Word, poems, and stories drawn from life and imagination.",
-  "hero_images": [],
-  "hero_overlay": 60,
-  "button_1_text": "",
-  "button_1_link": "",
+  "latest_title": "Latest writing",
   "button_2_text": "",
+  "button_1_text": "",
+  "hero_overlay": 60,
+  "hero_text": "Reflections from the Word, poems, and stories drawn from life and imagination.",
   "button_2_link": "",
-  "show_categories": true,
-  "latest_title": "Latest writing"
+  "button_1_link": "",
+  "hero_images": [
+    "/uploads/chatgpt-image-aug-20-2026-07_14_20-pm.png"
+  ],
+  "hero_heading": "Words with purpose.",
+  "show_categories": true
 }
