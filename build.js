@@ -8,47 +8,9 @@ marked.setOptions({ breaks: true });
 const root = __dirname;
 const out = path.join(root, 'dist');
 
-/* ---------- Settings ---------- */
-const DEFAULTS = {
-  title: 'EverRock Write',
-  tagline: 'Words with purpose',
-  author: 'EverRock Write',
-  hero_heading: 'Words with purpose.',
-  hero_text: 'Reflections from the Word, poems, and stories drawn from life and imagination.',
-};
-let rawSite = {};
-try {
-  rawSite = JSON.parse(fs.readFileSync(path.join(root, 'site.json'), 'utf8'));
-} catch (e) {
-  console.warn('site.json missing or invalid, using defaults');
-}
-const pick = (k) => (rawSite[k] == null ? '' : String(rawSite[k]).trim()) || DEFAULTS[k];
-const site = {
-  title: pick('title'),
-  tagline: pick('tagline'),
-  author: pick('author'),
-  heroHeading: pick('hero_heading'),
-  heroText: pick('hero_text'),
-};
-
-let baseUrl = String(rawSite.url || '').trim().replace(/\/+$/, '');
-if (baseUrl && !/^https?:\/\//.test(baseUrl)) baseUrl = 'https://' + baseUrl;
-
-// GoatCounter code: accept "mycode", "mycode.goatcounter.com" or a full URL
-const gc = String(rawSite.goatcounter || '')
-  .trim()
-  .toLowerCase()
-  .replace(/^https?:\/\//, '')
-  .replace(/\.goatcounter\.com.*$/, '')
-  .replace(/[^a-z0-9-]/g, '');
-
-const CATEGORIES = [
-  { name: 'Word from God', slug: 'word-from-god', blurb: 'Reflections and encouragement from the Word.' },
-  { name: 'Poem', slug: 'poem', blurb: 'Poems and lyrics.' },
-  { name: 'Life & Fictional Story', slug: 'life-and-fiction', blurb: 'Stories from real life, and stories imagined.' },
-];
-
 /* ---------- Helpers ---------- */
+const str = (v) => (v == null ? '' : String(v).trim());
+
 const esc = (s) =>
   String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
@@ -59,8 +21,20 @@ const slugify = (s) =>
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
+    .replace(/&/g, ' and ')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+
+function readJSON(file) {
+  const p = path.join(root, file);
+  if (!fs.existsSync(p)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(p, 'utf8')) || {};
+  } catch (e) {
+    console.warn(`Warning: ${file} could not be read (${e.message}). Using defaults.`);
+    return {};
+  }
+}
 
 const validDate = (d) => d instanceof Date && !isNaN(d);
 const fmtDate = (d) =>
@@ -77,35 +51,129 @@ function write(rel, content) {
   fs.writeFileSync(file, content);
 }
 
-const ICON_EYE =
-  '<svg class="ico" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+/* ---------- Settings (site.json, home.json, categories.json) ---------- */
+const rawSite = readJSON('site.json');
+const rawHome = readJSON('home.json');
+const rawCats = readJSON('categories.json');
 
-const viewsEl = (url) =>
-  gc
-    ? `<span class="views" data-views="${esc(url)}" hidden>${ICON_EYE}<span class="n"></span>&nbsp;<span class="u">views</span></span>`
-    : '';
+const site = {
+  title: str(rawSite.title) || 'EverRock Write',
+  tagline: str(rawSite.tagline) || 'Words with purpose',
+  author: str(rawSite.author) || str(rawSite.title) || 'EverRock Write',
+};
 
-/* ---------- Content ---------- */
-function readPage(rel) {
-  const file = path.join(root, rel);
-  if (!fs.existsSync(file)) return null;
-  const { data, content } = matter(fs.readFileSync(file, 'utf8'));
-  return { title: data.title || '', content };
+let baseUrl = str(rawSite.url).replace(/\/+$/, '');
+if (baseUrl && !/^https?:\/\//.test(baseUrl)) baseUrl = 'https://' + baseUrl;
+
+// GoatCounter: accept "mycode", "mycode.goatcounter.com" or a full address
+const gc = str(rawSite.goatcounter)
+  .toLowerCase()
+  .replace(/^https?:\/\//, '')
+  .replace(/\.goatcounter\.com.*$/, '')
+  .replace(/[^a-z0-9-]/g, '');
+
+// Logos and favicon. Defaults ship with the site; the admin can replace them.
+const logoSrc = str(rawSite.logo) || '/img/logo.png';
+const headerLogoSrc = str(rawSite.header_logo) || logoSrc;
+const faviconSrc = str(rawSite.favicon); // empty = use the shipped favicon files
+const shareImage = str(rawSite.logo) || '/img/og-default.png';
+
+// Home page
+const imgList = Array.isArray(rawHome.hero_images) ? rawHome.hero_images : [];
+let overlay = Number(rawHome.hero_overlay);
+if (!isFinite(overlay) || rawHome.hero_overlay === '' || rawHome.hero_overlay == null) overlay = 60;
+overlay = Math.min(90, Math.max(0, overlay)) / 100;
+const home = {
+  heading: str(rawHome.hero_heading) || str(rawSite.hero_heading) || 'Words with purpose.',
+  text:
+    str(rawHome.hero_text) ||
+    str(rawSite.hero_text) ||
+    'Reflections from the Word, poems, and stories drawn from life and imagination.',
+  images: imgList.map((x) => (typeof x === 'string' ? x : x && x.image ? x.image : '')).map(str).filter(Boolean),
+  overlay,
+  btn1Text: str(rawHome.button_1_text),
+  btn1Link: str(rawHome.button_1_link),
+  btn2Text: str(rawHome.button_2_text),
+  btn2Link: str(rawHome.button_2_link),
+  showCategories: rawHome.show_categories !== false,
+  latestTitle: str(rawHome.latest_title) || 'Latest writing',
+};
+
+const RESERVED = ['admin', 'posts', 'tags', 'css', 'js', 'img', 'uploads', 'writing', '404', 'feed', 'sitemap', 'robots'];
+
+/* ---------- Categories ---------- */
+const DEFAULT_CATEGORIES = [
+  { name: 'Word from God', slug: 'word-from-god', description: 'Reflections and encouragement from the Word.' },
+  { name: 'Poem', slug: 'poem', description: 'Poems and lyrics.' },
+  { name: 'Life & Fictional Story', slug: 'life-and-fiction', description: 'Stories from real life, and stories imagined.' },
+];
+const catSource = Array.isArray(rawCats.categories) && rawCats.categories.length ? rawCats.categories : DEFAULT_CATEGORIES;
+const CATEGORIES = [];
+for (const c of catSource) {
+  const name = str(c && c.name);
+  const slug = slugify(str(c && c.slug) || name);
+  if (!name || !slug) continue;
+  if (RESERVED.includes(slug) || CATEGORIES.some((x) => x.slug === slug)) {
+    console.warn(`Warning: category "${name}" skipped because the address /${slug}/ is already in use.`);
+    continue;
+  }
+  CATEGORIES.push({ name, slug, blurb: str(c.description) });
 }
 
+/* ---------- Pages ---------- */
+const parsePlacement = (v) => {
+  const s = str(v).toLowerCase();
+  if (s.startsWith('footer')) return 'footer';
+  if (s.startsWith('hidden')) return 'hidden';
+  return 'menu';
+};
+const pages = [];
+const pagesDir = path.join(root, 'content', 'pages');
+if (fs.existsSync(pagesDir)) {
+  for (const f of fs.readdirSync(pagesDir).filter((x) => x.endsWith('.md'))) {
+    const { data, content } = matter(fs.readFileSync(path.join(pagesDir, f), 'utf8'));
+    const slug = slugify(f.replace(/\.md$/, ''));
+    pages.push({
+      slug,
+      title: str(data.title) || slug,
+      placement: parsePlacement(data.placement),
+      order: isFinite(Number(data.menu_order)) && data.menu_order !== '' && data.menu_order != null ? Number(data.menu_order) : 50,
+      content,
+    });
+  }
+}
+// Privacy and copyright pages kept at the top level of the repo
+for (const [file, slug] of [['privacy.md', 'privacy'], ['copyright.md', 'copyright']]) {
+  const p = path.join(root, file);
+  if (!fs.existsSync(p) || pages.some((x) => x.slug === slug)) continue;
+  const { data, content } = matter(fs.readFileSync(p, 'utf8'));
+  pages.push({ slug, title: str(data.title) || slug, placement: 'footer', order: 100, content });
+}
+const livePages = pages.filter((p) => {
+  if (!p.slug || RESERVED.includes(p.slug) || CATEGORIES.some((c) => c.slug === p.slug)) {
+    console.warn(`Warning: page "${p.title}" skipped because the address /${p.slug}/ is already in use.`);
+    return false;
+  }
+  return true;
+});
+const byOrder = (a, b) => a.order - b.order || a.title.localeCompare(b.title);
+const menuPages = livePages.filter((p) => p.placement === 'menu').sort(byOrder);
+const footerPages = livePages.filter((p) => p.placement === 'footer').sort(byOrder);
+
+/* ---------- Posts ---------- */
 const postsDir = path.join(root, 'content', 'posts');
 const posts = (fs.existsSync(postsDir) ? fs.readdirSync(postsDir) : [])
   .filter((f) => f.endsWith('.md'))
   .map((f) => {
     const { data, content } = matter(fs.readFileSync(path.join(postsDir, f), 'utf8'));
     const slug = f.replace(/\.md$/, '');
-    const catKey = String(data.category || '').trim().toLowerCase();
+    const catKey = str(data.category).toLowerCase();
     const category = CATEGORIES.find((c) => c.name.toLowerCase() === catKey || c.slug === slugify(catKey)) || null;
     const rawTags = Array.isArray(data.tags) ? data.tags : String(data.tags || '').split(',');
     const seen = new Set();
     const tags = [];
     for (const t of rawTags) {
-      const name = String(t).trim();
+      const name = str(t);
       const s = slugify(name);
       if (name && s && !seen.has(s)) {
         seen.add(s);
@@ -115,10 +183,10 @@ const posts = (fs.existsSync(postsDir) ? fs.readdirSync(postsDir) : [])
     return {
       slug,
       url: `/posts/${slug}/`,
-      title: data.title || 'Untitled',
+      title: str(data.title) || 'Untitled',
       date: data.date ? new Date(data.date) : new Date(0),
-      summary: data.summary || '',
-      image: data.image || '',
+      summary: str(data.summary),
+      image: str(data.image),
       draft: data.draft === true,
       category,
       tags,
@@ -129,31 +197,37 @@ const posts = (fs.existsSync(postsDir) ? fs.readdirSync(postsDir) : [])
   .filter((p) => !p.draft)
   .sort((a, b) => b.date - a.date);
 
-const about = readPage('content/pages/about.md');
-const privacy = readPage('privacy.md');
-const copyright = readPage('copyright.md');
-
 /* ---------- Layout ---------- */
+const ICON_EYE =
+  '<svg class="ico" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+const viewsEl = (url) =>
+  gc
+    ? `<span class="views" data-views="${esc(url)}" hidden>${ICON_EYE}<span class="n"></span>&nbsp;<span class="u">views</span></span>`
+    : '';
+
 const navItems = [
   { key: 'home', href: '/', label: 'Home' },
   ...CATEGORIES.map((c) => ({ key: c.slug, href: `/${c.slug}/`, label: c.name })),
-  ...(about ? [{ key: 'about', href: '/about/', label: 'About' }] : []),
+  ...menuPages.map((p) => ({ key: p.slug, href: `/${p.slug}/`, label: p.title })),
 ];
 
 function layout({ title, description, image, body, current, urlPath, type, noindex }) {
   const fullTitle = title ? `${title} | ${site.title}` : `${site.title}: ${site.tagline}`;
-  const desc = description || site.heroText;
+  const desc = description || home.text;
   const canonical = baseUrl ? `${baseUrl}${urlPath || '/'}` : '';
-  const shareImg = image || '/img/og-default.png';
+  const shareImg = image || shareImage;
   const img = baseUrl && shareImg.startsWith('/') ? baseUrl + shareImg : shareImg;
   const nav = navItems
-    .map((n) => `<a href="${n.href}"${n.key === current ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`)
+    .map((n) => `<a href="${esc(n.href)}"${n.key === current ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`)
     .join('\n      ');
-  const footerPages = [
-    privacy ? '<li><a href="/privacy/">Privacy Policy</a></li>' : '',
-    copyright ? '<li><a href="/copyright/">Copyright and Ownership</a></li>' : '',
-    baseUrl ? '<li><a href="/feed.xml">RSS feed</a></li>' : '',
-  ].join('');
+  const icons = faviconSrc
+    ? `<link rel="icon" href="${esc(faviconSrc)}">\n<link rel="apple-touch-icon" href="${esc(faviconSrc)}">`
+    : `<link rel="icon" href="/favicon.ico" sizes="any">\n<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">\n<link rel="apple-touch-icon" href="/apple-touch-icon.png">`;
+  const footerLinks = footerPages.map((p) => `<li><a href="/${p.slug}/">${esc(p.title)}</a></li>`).join('');
+  const readLinks =
+    CATEGORIES.map((c) => `<li><a href="/${c.slug}/">${esc(c.name)}</a></li>`).join('') +
+    menuPages.map((p) => `<li><a href="/${p.slug}/">${esc(p.title)}</a></li>`).join('');
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -171,9 +245,7 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 ${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ''}
 <meta property="og:image" content="${esc(img)}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+${icons}
 ${baseUrl ? `<link rel="alternate" type="application/rss+xml" title="${esc(site.title)}" href="/feed.xml">` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -187,11 +259,7 @@ ${gc ? `<meta name="goatcounter" content="${gc}">\n<script data-goatcounter="htt
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="/" aria-label="${esc(site.title)} home">
-      <img class="mark mark-dark" src="/img/logo-mark.png" alt="" width="58" height="30">
-      <img class="mark mark-light" src="/img/logo-mark-light.png" alt="" width="58" height="30">
-      <span class="brand-name">${brandName()}</span>
-    </a>
+    <a class="brand" href="/"><img src="${esc(headerLogoSrc)}" alt="${esc(site.title)} home"></a>
     <nav class="nav" aria-label="Main">
       ${nav}
     </nav>
@@ -203,17 +271,14 @@ ${body}
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="f-brand">
-      <img src="/img/logo-mark-light.png" alt="" width="70" height="36">
+      <img src="${esc(logoSrc)}" alt="${esc(site.title)}">
       <p>${esc(site.tagline)}</p>
     </div>
-    <nav aria-label="Categories">
+    <nav aria-label="Pages">
       <h2>Read</h2>
-      <ul>${CATEGORIES.map((c) => `<li><a href="/${c.slug}/">${esc(c.name)}</a></li>`).join('')}${about ? '<li><a href="/about/">About</a></li>' : ''}</ul>
+      <ul>${readLinks}</ul>
     </nav>
-    <nav aria-label="Site information">
-      <h2>Site</h2>
-      <ul>${footerPages}</ul>
-    </nav>
+    ${footerLinks ? `<nav aria-label="Site information"><h2>Site</h2><ul>${footerLinks}</ul></nav>` : ''}
   </div>
   <div class="wrap fine">&copy; ${new Date().getFullYear()} ${esc(site.author)}. All rights reserved.</div>
 </footer>
@@ -221,17 +286,8 @@ ${body}
 </html>`;
 }
 
-function brandName() {
-  // "EverRock Write" keeps the logo's weight contrast: bold first word(s), light last word
-  const parts = site.title.split(/\s+/);
-  if (parts.length < 2) return `<b>${esc(site.title)}</b>`;
-  const last = parts.pop();
-  return `<b>${esc(parts.join(' '))}</b> <span class="w">${esc(last)}</span>`;
-}
-
 /* ---------- Components ---------- */
-const catLink = (p) =>
-  p.category ? `<a class="cat" href="/${p.category.slug}/">${esc(p.category.name)}</a>` : '';
+const catLink = (p) => (p.category ? `<a class="cat" href="/${p.category.slug}/">${esc(p.category.name)}</a>` : '');
 
 function row(p) {
   return `<li class="post-row reveal${p.image ? ' has-image' : ''}">
@@ -260,37 +316,31 @@ function featured(p) {
 }
 
 function related(post) {
-  const scored = posts
+  return posts
     .filter((p) => p.slug !== post.slug)
     .map((p) => {
       const shared = p.tags.filter((t) => post.tags.some((x) => x.slug === t.slug)).length;
       const sameCat = p.category && post.category && p.category.slug === post.category.slug ? 1 : 0;
       return { p, score: shared * 3 + sameCat * 2 };
     })
-    .sort((a, b) => b.score - a.score || b.p.date - a.p.date);
-  return scored.slice(0, 3).map((s) => s.p);
+    .sort((a, b) => b.score - a.score || b.p.date - a.p.date)
+    .slice(0, 3)
+    .map((s) => s.p);
 }
 
-function pageHead(title, sub) {
-  return `<header class="page-head wrap">
+const pageHead = (title, sub) => `<header class="page-head wrap">
   <h1 class="reveal">${esc(title)}</h1>
   ${sub ? `<p class="reveal">${esc(sub)}</p>` : ''}
 </header>`;
-}
 
-function emptyState(text) {
-  return `<p class="empty reveal">${text}</p>`;
-}
+const emptyState = (text) => `<p class="empty reveal">${text}</p>`;
 
 /* ---------- Build ---------- */
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
-if (fs.existsSync(path.join(root, 'static'))) {
-  fs.cpSync(path.join(root, 'static'), out, { recursive: true });
-}
+if (fs.existsSync(path.join(root, 'static'))) fs.cpSync(path.join(root, 'static'), out, { recursive: true });
 
-// Files uploaded to the repo's top level are placed where the site needs them.
-// These win over anything of the same name inside /static.
+// Files uploaded to the top level of the repo are placed where the site needs them.
 const rootAssets = {
   'style.css': 'css/style.css',
   'main.js': 'js/main.js',
@@ -298,8 +348,7 @@ const rootAssets = {
   'favicon.ico': 'favicon.ico',
   'favicon-32.png': 'favicon-32.png',
   'apple-touch-icon.png': 'apple-touch-icon.png',
-  'logo-mark.png': 'img/logo-mark.png',
-  'logo-mark-light.png': 'img/logo-mark-light.png',
+  'logo.png': 'img/logo.png',
   'og-default.png': 'img/og-default.png',
 };
 for (const [src, dest] of Object.entries(rootAssets)) {
@@ -312,43 +361,61 @@ for (const [src, dest] of Object.entries(rootAssets)) {
 }
 
 /* Home */
-const heroWords = site.heroHeading
+const heroWords = home.heading
   .split(/\s+/)
+  .filter(Boolean)
   .map((w, i) => `<span class="w" style="--i:${i}">${esc(w)}</span>`)
   .join(' ');
-const doors = CATEGORIES.map((c, i) => {
-  const n = posts.filter((p) => p.category && p.category.slug === c.slug).length;
-  return `<li class="door" style="--i:${i}"><a href="/${c.slug}/">
+
+const doors = CATEGORIES.slice(0, 5)
+  .map((c, i) => {
+    const n = posts.filter((p) => p.category && p.category.slug === c.slug).length;
+    return `<li class="door" style="--i:${i}"><a href="/${c.slug}/">
       <span class="name">${esc(c.name)}</span>
       <span class="count">${n === 0 ? 'Coming soon' : plural(n, 'post', 'posts')}</span>
-      <span class="blurb">${esc(c.blurb)}</span>
+      ${c.blurb ? `<span class="blurb">${esc(c.blurb)}</span>` : ''}
     </a></li>`;
-}).join('\n');
+  })
+  .join('\n');
 
-let homeBody = `<section class="hero">
-  <img class="hero-mark" src="/img/logo-mark-light.png" alt="" aria-hidden="true">
-  <div class="wrap hero-inner">
+const latest = posts[0];
+const b1 = {
+  text: home.btn1Text || (latest ? 'Read the latest post' : ''),
+  href: home.btn1Link || (latest ? latest.url : ''),
+};
+const b2 = {
+  text: home.btn2Text || (CATEGORIES[0] ? CATEGORIES[0].name : ''),
+  href: home.btn2Link || (CATEGORIES[0] ? `/${CATEGORIES[0].slug}/` : ''),
+};
+const heroImages = home.images.length
+  ? `<div class="hero-bg" aria-hidden="true" data-count="${home.images.length}">${home.images
+      .map((src, i) => `<img src="${esc(src)}" alt=""${i === 0 ? ' class="on" fetchpriority="high"' : ' loading="lazy"'}>`)
+      .join('')}</div><div class="hero-shade"></div>`
+  : '';
+const showDoors = home.showCategories && CATEGORIES.length > 0;
+
+let homeBody = `<section class="hero${home.images.length ? ' has-bg' : ''}" style="--overlay:${home.overlay}">
+  ${heroImages}
+  <div class="wrap hero-inner${showDoors ? ' with-doors' : ''}">
     <div class="hero-copy">
       <h1>${heroWords}</h1>
       <svg class="swoosh" viewBox="0 0 320 28" fill="none" aria-hidden="true"><path d="M3 21C70 5 190 1 317 13" stroke="currentColor" stroke-width="5" stroke-linecap="round" pathLength="1"/></svg>
-      <p class="hero-text">${esc(site.heroText)}</p>
+      <p class="hero-text">${esc(home.text)}</p>
       <div class="hero-actions">
-        ${posts.length ? `<a class="btn btn-primary" href="${posts[0].url}">Read the latest post</a>` : ''}
-        <a class="btn btn-ghost" href="/word-from-god/">Word from God</a>
+        ${b1.text && b1.href ? `<a class="btn btn-primary" href="${esc(b1.href)}">${esc(b1.text)}</a>` : ''}
+        ${b2.text && b2.href ? `<a class="btn btn-ghost" href="${esc(b2.href)}">${esc(b2.text)}</a>` : ''}
       </div>
     </div>
-    <ul class="doors">
-${doors}
-    </ul>
+    ${showDoors ? `<ul class="doors">\n${doors}\n    </ul>` : ''}
   </div>
 </section>
 <div class="wrap section">`;
 
 if (posts.length === 0) {
-  homeBody += `<h2 class="section-title reveal">Latest writing</h2>${emptyState('Nothing published yet. Open <a href="/admin/">/admin</a> to write your first post.')}`;
+  homeBody += `<h2 class="section-title reveal">${esc(home.latestTitle)}</h2>${emptyState('Nothing published yet. Open <a href="/admin/">/admin</a> to write your first post.')}`;
 } else {
   const [first, ...rest] = posts;
-  homeBody += `<div class="section-head reveal"><h2 class="section-title">Latest writing</h2>${posts.length > 7 ? '<a class="more" href="/writing/">All writing</a>' : ''}</div>
+  homeBody += `<div class="section-head reveal"><h2 class="section-title">${esc(home.latestTitle)}</h2>${posts.length > 7 ? '<a class="more" href="/writing/">All writing</a>' : ''}</div>
 ${featured(first)}`;
   const shown = rest.slice(0, 6);
   if (shown.length) homeBody += postList(shown);
@@ -437,24 +504,20 @@ for (const p of posts) {
   }));
 }
 
-/* Simple pages */
-function simplePage(page, slug, current) {
-  if (!page) return;
-  write(`${slug}/index.html`, layout({
-    title: page.title || slug,
-    urlPath: `/${slug}/`,
-    current,
+/* Pages (About, anything added in the admin, privacy, copyright) */
+for (const pg of livePages) {
+  write(`${pg.slug}/index.html`, layout({
+    title: pg.title,
+    urlPath: `/${pg.slug}/`,
+    current: pg.slug,
     body: `<article class="wrap">
   <div class="article">
-    <header class="article-head"><h1 class="reveal">${esc(page.title || slug)}</h1></header>
-    <div class="prose reveal">${marked.parse(page.content)}</div>
+    <header class="article-head"><h1 class="reveal">${esc(pg.title)}</h1></header>
+    <div class="prose reveal">${marked.parse(pg.content)}</div>
   </div>
 </article>`,
   }));
 }
-simplePage(about, 'about', 'about');
-simplePage(privacy, 'privacy', '');
-simplePage(copyright, 'copyright', '');
 
 /* 404 */
 write('404.html', layout({
@@ -463,7 +526,7 @@ write('404.html', layout({
   body: `<div class="wrap"><div class="article"><header class="article-head"><h1>Page not found</h1><p class="standfirst">That link does not lead anywhere. <a href="/">Go to the home page</a>.</p></header></div></div>`,
 }));
 
-/* RSS, sitemap, robots */
+/* RSS feed, sitemap, robots (only when the website address is set) */
 if (baseUrl) {
   const items = posts
     .map(
@@ -485,7 +548,12 @@ ${p.category ? `<category>${esc(p.category.name)}</category>` : ''}
 ${items}
 </channel></rss>`);
 
-  const urls = ['/', ...CATEGORIES.map((c) => `/${c.slug}/`), ...(about ? ['/about/'] : []), ...posts.map((p) => p.url)];
+  const urls = [
+    '/',
+    ...CATEGORIES.map((c) => `/${c.slug}/`),
+    ...livePages.filter((p) => p.placement !== 'hidden').map((p) => `/${p.slug}/`),
+    ...posts.map((p) => p.url),
+  ];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `<url><loc>${baseUrl}${u}</loc></url>`).join('\n')}
@@ -493,4 +561,4 @@ ${urls.map((u) => `<url><loc>${baseUrl}${u}</loc></url>`).join('\n')}
   write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${baseUrl}/sitemap.xml\n`);
 }
 
-console.log(`Built ${posts.length} post(s), ${tagMap.size} tag page(s) into dist/`);
+console.log(`Built ${posts.length} post(s), ${livePages.length} page(s), ${CATEGORIES.length} categor${CATEGORIES.length === 1 ? 'y' : 'ies'}, ${tagMap.size} tag page(s) into dist/`);

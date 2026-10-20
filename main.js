@@ -29,6 +29,21 @@ window.__erReady = true;
     for (var j = 0; j < els.length; j++) io.observe(els[j]);
   }
 
+
+  /* ---- Hero background slideshow (only when more than one image) ---- */
+  var heroImgs = d.querySelectorAll('.hero-bg img');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (heroImgs.length > 1 && !reduce) {
+    var cur = 0;
+    setInterval(function () {
+      heroImgs[cur].classList.remove('on');
+      cur = (cur + 1) % heroImgs.length;
+      var next = heroImgs[cur];
+      if (next.loading === 'lazy') next.loading = 'eager';
+      next.classList.add('on');
+    }, 6500);
+  }
+
   /* ---- View counts (GoatCounter) ---- */
   var meta = d.querySelector('meta[name="goatcounter"]');
   var code = meta && meta.getAttribute('content');

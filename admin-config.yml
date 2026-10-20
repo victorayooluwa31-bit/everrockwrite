@@ -7,6 +7,7 @@ media_folder: static/uploads
 public_folder: /uploads
 
 collections:
+  # ---------------------------------------------------------------- Posts
   - name: posts
     label: Posts
     label_singular: Post
@@ -21,9 +22,13 @@ collections:
       - { label: Title, name: title, widget: string }
       - label: Category
         name: category
-        widget: select
-        options: ["Word from God", "Poem", "Life & Fictional Story"]
-        hint: "Decides which page this post appears on."
+        widget: relation
+        collection: categories
+        file: all
+        search_fields: ["categories.*.name"]
+        value_field: "categories.*.name"
+        display_fields: ["categories.*.name"]
+        hint: "Decides which page this post appears on. Add or change categories under Categories."
       - { label: Publish date, name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
       - { label: Summary, name: summary, widget: text, hint: "One or two sentences shown on the home page and in share previews." }
       - { label: Tags, name: tags, widget: list, required: false, hint: "Type a tag and press Enter. Posts with shared tags are suggested as related reading." }
@@ -31,17 +36,82 @@ collections:
       - { label: Draft (hide from site), name: draft, widget: boolean, default: false, required: false }
       - { label: Body, name: body, widget: markdown }
 
+  # ---------------------------------------------------------------- Pages
   - name: pages
     label: Pages
+    label_singular: Page
+    folder: content/pages
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    summary: "{{title}}"
+    editor:
+      preview: false
+    fields:
+      - { label: Page title, name: title, widget: string, hint: "The web address is made from this. A page called Contact Me lives at /contact-me/." }
+      - label: Where should it appear?
+        name: placement
+        widget: select
+        options: ["Menu", "Footer only", "Hidden"]
+        default: "Menu"
+        required: false
+        hint: "Menu: in the top menu and the footer. Footer only: small link at the bottom. Hidden: not linked anywhere, only reachable by its address."
+      - { label: Menu order, name: menu_order, widget: number, value_type: int, min: 1, max: 99, default: 50, required: false, hint: "Smaller numbers come first. Pages with the same number are sorted by title." }
+      - { label: Body, name: body, widget: markdown }
+
+  # ---------------------------------------------------------------- Home page
+  - name: home
+    label: Home page
     editor:
       preview: false
     files:
-      - label: About
-        name: about
-        file: content/pages/about.md
+      - label: Home page
+        name: home
+        file: home.json
         fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Body, name: body, widget: markdown }
+          - { label: Hero heading, name: hero_heading, widget: string, required: false }
+          - { label: Hero text, name: hero_text, widget: text, required: false }
+          - label: Hero background images
+            name: hero_images
+            widget: list
+            required: false
+            hint: "Add one image, or several to fade between them every few seconds. Wide, landscape photos at least 1600 px wide work best. Leave empty for the plain navy hero."
+            field: { label: Image, name: image, widget: image }
+          - { label: Darkness over images, name: hero_overlay, widget: number, value_type: int, min: 0, max: 90, step: 5, default: 60, required: false, hint: "0 shows the image as it is, 90 is almost black. Around 60 keeps the white text easy to read on most photos." }
+          - { label: First button text, name: button_1_text, widget: string, required: false, hint: "Leave empty to use 'Read the latest post'." }
+          - { label: First button link, name: button_1_link, widget: string, required: false, hint: "For example /about/ or https://example.com. Leave empty to link to the latest post." }
+          - { label: Second button text, name: button_2_text, widget: string, required: false, hint: "Leave empty to link to your first category." }
+          - { label: Second button link, name: button_2_link, widget: string, required: false }
+          - { label: Show category list beside the heading, name: show_categories, widget: boolean, default: true, required: false }
+          - { label: Title above the latest posts, name: latest_title, widget: string, required: false, hint: "Default: Latest writing" }
+
+  # ---------------------------------------------------------------- Categories
+  - name: categories
+    label: Categories
+    editor:
+      preview: false
+    files:
+      - label: Categories
+        name: all
+        file: categories.json
+        fields:
+          - label: Categories
+            name: categories
+            widget: list
+            label_singular: Category
+            summary: "{{fields.name}}"
+            hint: "Each category gets its own page and a place in the menu, in this order. Drag to reorder."
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Short description, name: description, widget: text, required: false, hint: "Shown under the category title." }
+              - { label: Web address ending, name: slug, widget: string, required: false, hint: "Optional. Leave empty and it is made from the name. Changing it later breaks links people have saved." }
+
+  # ---------------------------------------------------------------- Privacy and copyright
+  - name: legal
+    label: Privacy and copyright
+    editor:
+      preview: false
+    files:
       - label: Privacy Policy
         name: privacy
         file: privacy.md
@@ -55,6 +125,7 @@ collections:
           - { label: Title, name: title, widget: string }
           - { label: Body, name: body, widget: markdown }
 
+  # ---------------------------------------------------------------- Site settings
   - name: settings
     label: Site settings
     editor:
@@ -66,8 +137,9 @@ collections:
         fields:
           - { label: Site name, name: title, widget: string }
           - { label: Tagline, name: tagline, widget: string }
-          - { label: Author or owner name (footer), name: author, widget: string }
-          - { label: Hero heading (home page), name: hero_heading, widget: string }
-          - { label: Hero text (home page), name: hero_text, widget: text }
-          - { label: Website address, name: url, widget: string, hint: "For example https://everrockwrite.netlify.app (no slash at the end). Needed for the RSS feed and share previews." }
+          - { label: Owner name (shown in the footer), name: author, widget: string }
+          - { label: Website address, name: url, widget: string, hint: "For example https://everrockwrite.netlify.app (no slash at the end). Needed for share previews and the sitemap." }
+          - { label: Main logo, name: logo, widget: image, required: false, hint: "Shown in the footer and in share previews. Leave empty to keep the current logo. A square PNG with a transparent or white background works best." }
+          - { label: Header logo, name: header_logo, widget: image, required: false, hint: "A wide version of your logo for the top of the site. Leave empty to use the main logo." }
+          - { label: Favicon, name: favicon, widget: image, required: false, hint: "The small icon in the browser tab. Upload a square PNG, about 512 x 512 px. Leave empty to keep the current one." }
           - { label: GoatCounter code, name: goatcounter, widget: string, required: false, hint: "The part before .goatcounter.com. Leave empty to hide view counts." }

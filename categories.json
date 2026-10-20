@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "name": "Word from God",
+      "description": "Reflections and encouragement from the Word.",
+      "slug": "word-from-god"
+    },
+    {
+      "name": "Poem",
+      "description": "Poems and lyrics.",
+      "slug": "poem"
+    },
+    {
+      "name": "Life & Fictional Story",
+      "description": "Stories from real life, and stories imagined.",
+      "slug": "life-and-fiction"
+    }
+  ]
+}
