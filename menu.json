@@ -1,1 +1,13 @@
-{ "dropdowns": [] }
+{
+  "dropdowns": [
+    {
+      "items": [
+        {
+          "type": "category",
+          "category": "Word from God"
+        }
+      ],
+      "label": "Word From God"
+    }
+  ]
+}
