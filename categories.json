@@ -6,7 +6,7 @@
       "slug": "word-from-god"
     },
     {
-      "name": "Poem",
+      "name": "Faith & Spirituality",
       "description": "Poems and lyrics.",
       "slug": "poem"
     },
@@ -23,6 +23,54 @@
     },
     {
       "name": "Christian Living"
+    },
+    {
+      "name": "Love & Relationships"
+    },
+    {
+      "name": "Life & Growth"
+    },
+    {
+      "name": "Pain & Healing"
+    },
+    {
+      "name": "Hope & Inspiration"
+    },
+    {
+      "name": "Personal Reflections"
+    },
+    {
+      "name": "Lessons from Life"
+    },
+    {
+      "name": "Relationships"
+    },
+    {
+      "name": "Personal Growth"
+    },
+    {
+      "name": "Life Experiences"
+    },
+    {
+      "name": "Short Stories"
+    },
+    {
+      "name": "Romance & Relationships"
+    },
+    {
+      "name": "Drama"
+    },
+    {
+      "name": "Mystery & Suspense"
+    },
+    {
+      "name": "Inspirational Fiction"
+    },
+    {
+      "name": "About EverRock Write"
+    },
+    {
+      "name": "About the Writer"
     }
   ]
 }
