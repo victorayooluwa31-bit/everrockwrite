@@ -16,7 +16,8 @@
         },
         {
           "type": "category",
-          "category": "Christian Living"
+          "category": "Christian Living",
+          "label": "Don't show in the footer"
         }
       ],
       "label": "WORD FROM GOD"
