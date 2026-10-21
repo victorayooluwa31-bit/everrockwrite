@@ -25,6 +25,23 @@ const slugify = (s) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
+// Accept only hex colours so a typo can never break the stylesheet
+const hex = (v) => {
+  const s = str(v);
+  return /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(s) ? s : '';
+};
+function hexToRgb(h) {
+  let s = h.replace('#', '');
+  if (s.length <= 4) s = s.split('').map((c) => c + c).join('');
+  return [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)];
+}
+const safeUrl = (u) => {
+  const s = str(u);
+  return /^\s*(javascript|data|vbscript):/i.test(s) ? '' : s;
+};
+const isExternal = (u) => /^(https?:)?\/\//i.test(u);
+const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+
 function readJSON(file) {
   const p = path.join(root, file);
   if (!fs.existsSync(p)) return {};
@@ -51,10 +68,11 @@ function write(rel, content) {
   fs.writeFileSync(file, content);
 }
 
-/* ---------- Settings (site.json, home.json, categories.json) ---------- */
+/* ---------- Settings (site.json, home.json, categories.json, menu.json) ---------- */
 const rawSite = readJSON('site.json');
 const rawHome = readJSON('home.json');
 const rawCats = readJSON('categories.json');
+const rawMenu = readJSON('menu.json');
 
 const site = {
   title: str(rawSite.title) || 'EverRock Write',
@@ -78,11 +96,29 @@ const headerLogoSrc = str(rawSite.header_logo) || logoSrc;
 const faviconSrc = str(rawSite.favicon); // empty = use the shipped favicon files
 const shareImage = str(rawSite.logo) || '/img/og-default.png';
 
+// Site-wide colours (only the ones that are set override the defaults)
+const colorVars = {
+  text: '--ink',
+  background: '--bg',
+  accent: '--accent',
+  header_bg: '--header-bg',
+  header_text: '--header-fg',
+  footer_bg: '--footer-bg',
+  footer_text: '--footer-fg',
+  button: '--btn-bg',
+  button_text: '--btn-fg',
+};
+const rawColors = rawSite.colors && typeof rawSite.colors === 'object' ? rawSite.colors : {};
+const colorCss = Object.entries(colorVars)
+  .map(([k, v]) => (hex(rawColors[k]) ? `${v}:${hex(rawColors[k])}` : ''))
+  .filter(Boolean)
+  .join(';');
+
 // Home page
 const imgList = Array.isArray(rawHome.hero_images) ? rawHome.hero_images : [];
 let overlay = Number(rawHome.hero_overlay);
 if (!isFinite(overlay) || rawHome.hero_overlay === '' || rawHome.hero_overlay == null) overlay = 60;
-overlay = Math.min(90, Math.max(0, overlay)) / 100;
+overlay = clamp(overlay, 0, 90) / 100;
 const home = {
   heading: str(rawHome.hero_heading) || str(rawSite.hero_heading) || 'Words with purpose.',
   text:
@@ -91,12 +127,16 @@ const home = {
     'Reflections from the Word, poems, and stories drawn from life and imagination.',
   images: imgList.map((x) => (typeof x === 'string' ? x : x && x.image ? x.image : '')).map(str).filter(Boolean),
   overlay,
+  heroBg: hex(rawHome.hero_bg_color),
+  heroFg: hex(rawHome.hero_text_color),
   btn1Text: str(rawHome.button_1_text),
-  btn1Link: str(rawHome.button_1_link),
+  btn1Link: safeUrl(rawHome.button_1_link),
   btn2Text: str(rawHome.button_2_text),
-  btn2Link: str(rawHome.button_2_link),
+  btn2Link: safeUrl(rawHome.button_2_link),
   showCategories: rawHome.show_categories !== false,
   latestTitle: str(rawHome.latest_title) || 'Latest writing',
+  // null = nothing added yet: show the default "Latest writing" section
+  sections: Array.isArray(rawHome.sections) && rawHome.sections.length ? rawHome.sections : null,
 };
 
 const RESERVED = ['admin', 'posts', 'tags', 'css', 'js', 'img', 'uploads', 'writing', '404', 'feed', 'sitemap', 'robots'];
@@ -119,6 +159,10 @@ for (const c of catSource) {
   }
   CATEGORIES.push({ name, slug, blurb: str(c.description) });
 }
+const findCategory = (v) => {
+  const k = str(v).toLowerCase();
+  return k ? CATEGORIES.find((c) => c.name.toLowerCase() === k || c.slug === slugify(k)) || null : null;
+};
 
 /* ---------- Pages ---------- */
 const parsePlacement = (v) => {
@@ -138,6 +182,8 @@ if (fs.existsSync(pagesDir)) {
       title: str(data.title) || slug,
       placement: parsePlacement(data.placement),
       order: isFinite(Number(data.menu_order)) && data.menu_order !== '' && data.menu_order != null ? Number(data.menu_order) : 50,
+      showTitle: data.show_title !== false,
+      sections: Array.isArray(data.sections) ? data.sections : [],
       content,
     });
   }
@@ -147,7 +193,7 @@ for (const [file, slug] of [['privacy.md', 'privacy'], ['copyright.md', 'copyrig
   const p = path.join(root, file);
   if (!fs.existsSync(p) || pages.some((x) => x.slug === slug)) continue;
   const { data, content } = matter(fs.readFileSync(p, 'utf8'));
-  pages.push({ slug, title: str(data.title) || slug, placement: 'footer', order: 100, content });
+  pages.push({ slug, title: str(data.title) || slug, placement: 'footer', order: 100, showTitle: true, sections: [], content });
 }
 const livePages = pages.filter((p) => {
   if (!p.slug || RESERVED.includes(p.slug) || CATEGORIES.some((c) => c.slug === p.slug)) {
@@ -159,6 +205,10 @@ const livePages = pages.filter((p) => {
 const byOrder = (a, b) => a.order - b.order || a.title.localeCompare(b.title);
 const menuPages = livePages.filter((p) => p.placement === 'menu').sort(byOrder);
 const footerPages = livePages.filter((p) => p.placement === 'footer').sort(byOrder);
+const findPage = (v) => {
+  const k = str(v).toLowerCase();
+  return k ? livePages.find((p) => p.title.toLowerCase() === k || p.slug === slugify(k)) || null : null;
+};
 
 /* ---------- Posts ---------- */
 const postsDir = path.join(root, 'content', 'posts');
@@ -167,8 +217,7 @@ const posts = (fs.existsSync(postsDir) ? fs.readdirSync(postsDir) : [])
   .map((f) => {
     const { data, content } = matter(fs.readFileSync(path.join(postsDir, f), 'utf8'));
     const slug = f.replace(/\.md$/, '');
-    const catKey = str(data.category).toLowerCase();
-    const category = CATEGORIES.find((c) => c.name.toLowerCase() === catKey || c.slug === slugify(catKey)) || null;
+    const category = findCategory(data.category);
     const rawTags = Array.isArray(data.tags) ? data.tags : String(data.tags || '').split(',');
     const seen = new Set();
     const tags = [];
@@ -197,6 +246,75 @@ const posts = (fs.existsSync(postsDir) ? fs.readdirSync(postsDir) : [])
   .filter((p) => !p.draft)
   .sort((a, b) => b.date - a.date);
 
+/* ---------- Menu (automatic, plus optional dropdowns from menu.json) ---------- */
+const autoNav = [
+  { key: 'home', cur: 'home', href: '/', label: 'Home' },
+  ...CATEGORIES.map((c) => ({ key: 'cat:' + c.slug, cur: c.slug, href: `/${c.slug}/`, label: c.name })),
+  ...menuPages.map((p) => ({ key: 'page:' + p.slug, cur: p.slug, href: `/${p.slug}/`, label: p.title })),
+];
+
+const dropdowns = (Array.isArray(rawMenu.dropdowns) ? rawMenu.dropdowns : [])
+  .map((d) => {
+    const label = str(d && d.label);
+    const items = [];
+    const captured = new Set();
+    for (const it of Array.isArray(d && d.items) ? d.items : []) {
+      const type = str(it && it.type);
+      if (type === 'page') {
+        const pg = findPage(it.page);
+        if (!pg) { console.warn(`Warning: menu "${label}": page "${str(it.page)}" not found, skipped.`); continue; }
+        items.push({ label: str(it.label) || pg.title, href: `/${pg.slug}/`, cur: pg.slug });
+        captured.add('page:' + pg.slug);
+      } else if (type === 'category') {
+        const c = findCategory(it.category);
+        if (!c) { console.warn(`Warning: menu "${label}": category "${str(it.category)}" not found, skipped.`); continue; }
+        items.push({ label: str(it.label) || c.name, href: `/${c.slug}/`, cur: c.slug });
+        captured.add('cat:' + c.slug);
+      } else if (type === 'link') {
+        const url = safeUrl(it.url);
+        if (!str(it.label) || !url) continue;
+        items.push({ label: str(it.label), href: url, cur: '', external: isExternal(url) });
+      }
+    }
+    return { label, items, captured };
+  })
+  .filter((d) => d.label && d.items.length);
+
+// A dropdown sits where its first moved item used to be; link-only dropdowns go at the end.
+const navItems = [];
+{
+  const placed = new Set();
+  for (const a of autoNav) {
+    const d = dropdowns.find((x) => x.captured.has(a.key));
+    if (d) {
+      if (!placed.has(d)) { placed.add(d); navItems.push({ dropdown: d }); }
+      continue;
+    }
+    navItems.push(a);
+  }
+  for (const d of dropdowns) if (!placed.has(d)) navItems.push({ dropdown: d });
+}
+
+const CHEVRON =
+  '<svg class="chev" viewBox="0 0 12 8" width="11" height="8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1.5l5 5 5-5"/></svg>';
+
+function navLink(n, current) {
+  return `<a href="${esc(n.href)}"${n.cur && n.cur === current ? ' aria-current="page"' : ''}${n.external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(n.label)}</a>`;
+}
+function navHtml(current) {
+  return navItems
+    .map((n) => {
+      if (!n.dropdown) return navLink(n, current);
+      const d = n.dropdown;
+      const active = d.items.some((i) => i.cur && i.cur === current);
+      return `<div class="has-sub${active ? ' active' : ''}">
+        <button type="button" class="sub-toggle" aria-expanded="false">${esc(d.label)}${CHEVRON}</button>
+        <ul class="sub">${d.items.map((i) => `<li>${navLink(i, current)}</li>`).join('')}</ul>
+      </div>`;
+    })
+    .join('\n      ');
+}
+
 /* ---------- Layout ---------- */
 const ICON_EYE =
   '<svg class="ico" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -206,21 +324,12 @@ const viewsEl = (url) =>
     ? `<span class="views" data-views="${esc(url)}" hidden>${ICON_EYE}<span class="n"></span>&nbsp;<span class="u">views</span></span>`
     : '';
 
-const navItems = [
-  { key: 'home', href: '/', label: 'Home' },
-  ...CATEGORIES.map((c) => ({ key: c.slug, href: `/${c.slug}/`, label: c.name })),
-  ...menuPages.map((p) => ({ key: p.slug, href: `/${p.slug}/`, label: p.title })),
-];
-
 function layout({ title, description, image, body, current, urlPath, type, noindex }) {
   const fullTitle = title ? `${title} | ${site.title}` : `${site.title}: ${site.tagline}`;
   const desc = description || home.text;
   const canonical = baseUrl ? `${baseUrl}${urlPath || '/'}` : '';
   const shareImg = image || shareImage;
   const img = baseUrl && shareImg.startsWith('/') ? baseUrl + shareImg : shareImg;
-  const nav = navItems
-    .map((n) => `<a href="${esc(n.href)}"${n.key === current ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`)
-    .join('\n      ');
   const icons = faviconSrc
     ? `<link rel="icon" href="${esc(faviconSrc)}">\n<link rel="apple-touch-icon" href="${esc(faviconSrc)}">`
     : `<link rel="icon" href="/favicon.ico" sizes="any">\n<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">\n<link rel="apple-touch-icon" href="/apple-touch-icon.png">`;
@@ -235,7 +344,7 @@ function layout({ title, description, image, body, current, urlPath, type, noind
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#05132A">
+<meta name="theme-color" content="${hex(rawColors.header_bg) || '#05132A'}">
 ${noindex ? '<meta name="robots" content="noindex">' : ''}
 ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 <meta property="og:site_name" content="${esc(site.title)}">
@@ -252,6 +361,7 @@ ${baseUrl ? `<link rel="alternate" type="application/rss+xml" title="${esc(site.
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__erReady)document.documentElement.classList.add('no-anim')},3000)</script>
 <link rel="stylesheet" href="/css/style.css">
+${colorCss ? `<style>:root{${colorCss}}</style>` : ''}
 ${gc ? `<meta name="goatcounter" content="${gc}">\n<script data-goatcounter="https://${gc}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>` : ''}
 <script src="/js/main.js" defer></script>
 </head>
@@ -260,8 +370,9 @@ ${gc ? `<meta name="goatcounter" content="${gc}">\n<script data-goatcounter="htt
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/"><img src="${esc(headerLogoSrc)}" alt="${esc(site.title)} home"></a>
-    <nav class="nav" aria-label="Main">
-      ${nav}
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"></span><span class="lbl">Menu</span></button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      ${navHtml(current)}
     </nav>
   </div>
 </header>
@@ -335,6 +446,142 @@ const pageHead = (title, sub) => `<header class="page-head wrap">
 
 const emptyState = (text) => `<p class="empty reveal">${text}</p>`;
 
+/* ---------- Section builder ---------- */
+const SPACING = { none: 'sp-none', small: 'sp-sm', medium: 'sp-md', large: 'sp-lg' };
+
+function shell(s, inner) {
+  const st = s.style && typeof s.style === 'object' ? s.style : {};
+  const bg = hex(st.bg);
+  const fg = hex(st.fg);
+  const img = safeUrl(st.bg_image);
+  let ov = Number(st.overlay);
+  if (!isFinite(ov) || st.overlay === '' || st.overlay == null) ov = 40;
+  ov = clamp(ov, 0, 90) / 100;
+  const sp = SPACING[str(st.spacing).toLowerCase()] || 'sp-md';
+  const center = str(st.align).toLowerCase() === 'center' ? ' center' : '';
+  // Colours are set as --bg / --ink on the section so everything inside it (buttons, lines, muted text) follows
+  const vars = [bg ? `background:${bg};--bg:${bg}` : '', fg ? `color:${fg};--ink:${fg}` : '', img ? `--ov:${ov}` : '']
+    .filter(Boolean)
+    .join(';');
+  return `<section class="blk blk-${esc(s.type)} ${sp}${center}${img ? ' has-img' : ''}"${vars ? ` style="${vars}"` : ''}>
+${img ? `<img class="blk-bgimg" src="${esc(img)}" alt="" loading="lazy"><div class="blk-shade"></div>` : ''}
+${inner}
+</section>`;
+}
+
+function buttonsHtml(list) {
+  const html = (Array.isArray(list) ? list : [])
+    .map((b) => {
+      const label = str(b && b.label);
+      const link = safeUrl(b && b.link);
+      if (!label || !link) return '';
+      const bg = hex(b.bg);
+      const fg = hex(b.fg);
+      const outline = str(b.style).toLowerCase() === 'outline';
+      const vars = [bg ? `--b-bg:${bg}` : '', fg ? `--b-fg:${fg}` : ''].filter(Boolean).join(';');
+      const ext = isExternal(link) || b.new_tab === true;
+      return `<a class="btn ${outline ? 'btn-outline' : 'btn-fill'}" href="${esc(link)}"${vars ? ` style="${vars}"` : ''}${ext ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(label)}</a>`;
+    })
+    .join('');
+  return html ? `<div class="btn-row">${html}</div>` : '';
+}
+
+const heading = (s, tag = 'h2') => (str(s.heading) ? `<${tag}>${esc(str(s.heading))}</${tag}>` : '');
+const prose = (md) => (str(md) ? `<div class="prose">${marked.parse(String(md))}</div>` : '');
+
+function videoEmbed(url) {
+  const u = safeUrl(url);
+  let m;
+  if ((m = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{11})/)))
+    return `<iframe src="https://www.youtube-nocookie.com/embed/${m[1]}" title="Video" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  if ((m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/)))
+    return `<iframe src="https://player.vimeo.com/video/${m[1]}" title="Video" loading="lazy" allow="picture-in-picture" allowfullscreen></iframe>`;
+  if (/\.(mp4|webm)(\?.*)?$/i.test(u)) return `<video src="${esc(u)}" controls preload="metadata"></video>`;
+  return '';
+}
+
+function latestBlock(s) {
+  const title = str(s.title) || 'Latest writing';
+  let count = parseInt(s.count, 10);
+  if (!(count > 0)) count = 7;
+  count = Math.min(count, 30);
+  const cat = findCategory(s.category);
+  const list = cat ? posts.filter((p) => p.category && p.category.slug === cat.slug) : posts;
+  let inner = `<div class="wrap"><div class="section-head reveal"><h2 class="section-title">${esc(title)}</h2>${
+    list.length > count ? `<a class="more" href="${cat ? `/${cat.slug}/` : '/writing/'}">All ${cat ? esc(cat.name) : 'writing'}</a>` : ''
+  }</div>`;
+  if (!list.length) {
+    inner += emptyState(
+      cat ? `Nothing here yet. Posts published in <strong>${esc(cat.name)}</strong> will appear here.` : 'Nothing published yet. Open <a href="/admin/">/admin</a> to write your first post.'
+    );
+  } else {
+    const [first, ...rest] = list;
+    inner += featured(first);
+    const shown = rest.slice(0, count - 1);
+    if (shown.length) inner += postList(shown);
+  }
+  return inner + '</div>';
+}
+
+function renderBlock(s) {
+  if (!s || typeof s !== 'object') return '';
+  const t = str(s.type);
+  s.type = t;
+  switch (t) {
+    case 'text': {
+      const wide = str(s.width).toLowerCase() === 'wide';
+      return shell(s, `<div class="wrap"><div class="blk-in${wide ? ' wide' : ''} reveal">${heading(s)}${prose(s.body)}${buttonsHtml(s.buttons)}</div></div>`);
+    }
+    case 'image_text': {
+      const img = safeUrl(s.image);
+      if (!img) return '';
+      const right = str(s.side).toLowerCase() === 'right';
+      return shell(
+        s,
+        `<div class="wrap"><div class="split${right ? ' img-right' : ''} reveal"><div class="split-img"><img src="${esc(img)}" alt="${esc(str(s.alt))}" loading="lazy"></div><div class="split-text">${heading(s)}${prose(s.body)}${buttonsHtml(s.buttons)}</div></div></div>`
+      );
+    }
+    case 'image': {
+      const img = safeUrl(s.image);
+      if (!img) return '';
+      const full = str(s.size).toLowerCase().startsWith('full');
+      const fig = `<figure class="pic reveal"><img src="${esc(img)}" alt="${esc(str(s.alt))}" loading="lazy">${str(s.caption) ? `<figcaption>${esc(str(s.caption))}</figcaption>` : ''}</figure>`;
+      return shell(s, full ? `<div class="full">${fig}</div>` : `<div class="wrap">${fig}</div>`);
+    }
+    case 'buttons':
+      return shell(s, `<div class="wrap"><div class="blk-in cta reveal">${heading(s)}${str(s.text) ? `<p class="lead">${esc(str(s.text))}</p>` : ''}${buttonsHtml(s.buttons)}</div></div>`);
+    case 'gallery': {
+      const items = (Array.isArray(s.images) ? s.images : [])
+        .map((g) => ({ src: safeUrl(typeof g === 'string' ? g : g && g.image), cap: typeof g === 'object' && g ? str(g.caption) : '' }))
+        .filter((g) => g.src);
+      if (!items.length) return '';
+      const cols = [2, 3, 4].includes(parseInt(s.columns, 10)) ? parseInt(s.columns, 10) : 3;
+      return shell(
+        s,
+        `<div class="wrap">${heading(s)}<ul class="gallery cols-${cols} stagger">${items
+          .map((g) => `<li class="reveal"><figure><img src="${esc(g.src)}" alt="${esc(g.cap)}" loading="lazy">${g.cap ? `<figcaption>${esc(g.cap)}</figcaption>` : ''}</figure></li>`)
+          .join('')}</ul></div>`
+      );
+    }
+    case 'video': {
+      const v = videoEmbed(s.url);
+      if (!v) { console.warn(`Warning: video link "${str(s.url)}" is not a YouTube, Vimeo or .mp4 address, skipped.`); return ''; }
+      return shell(s, `<div class="wrap"><div class="blk-in wide reveal">${heading(s)}<div class="video">${v}</div>${str(s.caption) ? `<p class="cap">${esc(str(s.caption))}</p>` : ''}</div></div>`);
+    }
+    case 'quote':
+      if (!str(s.text)) return '';
+      return shell(s, `<div class="wrap"><blockquote class="big-quote reveal"><p>${esc(str(s.text)).replace(/\n/g, '<br>')}</p>${str(s.source) ? `<footer>${esc(str(s.source))}</footer>` : ''}</blockquote></div>`);
+    case 'latest_posts':
+      return shell(s, latestBlock(s));
+    case 'html':
+      return str(s.code) ? shell(s, `<div class="wrap"><div class="blk-in wide custom">${String(s.code)}</div></div>`) : '';
+    default:
+      if (t) console.warn(`Warning: unknown section type "${t}" skipped.`);
+      return '';
+  }
+}
+const renderSections = (list) => (Array.isArray(list) ? list.map(renderBlock).join('\n') : '');
+
 /* ---------- Build ---------- */
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
@@ -379,22 +626,27 @@ const doors = CATEGORIES.slice(0, 5)
   .join('\n');
 
 const latest = posts[0];
-const b1 = {
-  text: home.btn1Text || (latest ? 'Read the latest post' : ''),
-  href: home.btn1Link || (latest ? latest.url : ''),
-};
-const b2 = {
-  text: home.btn2Text || (CATEGORIES[0] ? CATEGORIES[0].name : ''),
-  href: home.btn2Link || (CATEGORIES[0] ? `/${CATEGORIES[0].slug}/` : ''),
-};
+const b1 = { text: home.btn1Text || (latest ? 'Read the latest post' : ''), href: home.btn1Link || (latest ? latest.url : '') };
+const b2 = { text: home.btn2Text || (CATEGORIES[0] ? CATEGORIES[0].name : ''), href: home.btn2Link || (CATEGORIES[0] ? `/${CATEGORIES[0].slug}/` : '') };
 const heroImages = home.images.length
   ? `<div class="hero-bg" aria-hidden="true" data-count="${home.images.length}">${home.images
       .map((src, i) => `<img src="${esc(src)}" alt=""${i === 0 ? ' class="on" fetchpriority="high"' : ' loading="lazy"'}>`)
       .join('')}</div><div class="hero-shade"></div>`
   : '';
 const showDoors = home.showCategories && CATEGORIES.length > 0;
+const [sr, sg, sb] = hexToRgb(home.heroBg || '#05132a');
+const heroVars = [
+  home.heroBg ? `--hero-bg:${home.heroBg}` : '',
+  home.heroFg ? `--hero-fg:${home.heroFg}` : '',
+  `--overlay:${home.overlay}`,
+  `--shade:rgb(${sr} ${sg} ${sb} / ${home.overlay})`,
+]
+  .filter(Boolean)
+  .join(';');
 
-let homeBody = `<section class="hero${home.images.length ? ' has-bg' : ''}" style="--overlay:${home.overlay}">
+const homeSections = home.sections === null ? [{ type: 'latest_posts', title: home.latestTitle, count: 7 }] : home.sections;
+
+const homeBody = `<section class="hero${home.images.length ? ' has-bg' : ''}" style="${heroVars}">
   ${heroImages}
   <div class="wrap hero-inner${showDoors ? ' with-doors' : ''}">
     <div class="hero-copy">
@@ -409,23 +661,11 @@ let homeBody = `<section class="hero${home.images.length ? ' has-bg' : ''}" styl
     ${showDoors ? `<ul class="doors">\n${doors}\n    </ul>` : ''}
   </div>
 </section>
-<div class="wrap section">`;
-
-if (posts.length === 0) {
-  homeBody += `<h2 class="section-title reveal">${esc(home.latestTitle)}</h2>${emptyState('Nothing published yet. Open <a href="/admin/">/admin</a> to write your first post.')}`;
-} else {
-  const [first, ...rest] = posts;
-  homeBody += `<div class="section-head reveal"><h2 class="section-title">${esc(home.latestTitle)}</h2>${posts.length > 7 ? '<a class="more" href="/writing/">All writing</a>' : ''}</div>
-${featured(first)}`;
-  const shown = rest.slice(0, 6);
-  if (shown.length) homeBody += postList(shown);
-  if (posts.length > 7) homeBody += `<p class="all-link reveal"><a class="btn btn-solid" href="/writing/">See all ${posts.length} posts</a></p>`;
-}
-homeBody += `</div>`;
+${renderSections(homeSections)}`;
 write('index.html', layout({ body: homeBody, current: 'home', urlPath: '/' }));
 
 /* All writing */
-if (posts.length > 7) {
+if (posts.length) {
   write('writing/index.html', layout({
     title: 'All writing',
     description: 'Every post on ' + site.title,
@@ -506,16 +746,15 @@ for (const p of posts) {
 
 /* Pages (About, anything added in the admin, privacy, copyright) */
 for (const pg of livePages) {
+  const hasBody = str(pg.content) !== '';
+  const showHead = pg.showTitle || hasBody;
+  const head = `${pg.showTitle ? `<header class="article-head"><h1 class="reveal">${esc(pg.title)}</h1></header>` : ''}${hasBody ? `<div class="prose reveal">${marked.parse(pg.content)}</div>` : ''}`;
   write(`${pg.slug}/index.html`, layout({
     title: pg.title,
     urlPath: `/${pg.slug}/`,
     current: pg.slug,
-    body: `<article class="wrap">
-  <div class="article">
-    <header class="article-head"><h1 class="reveal">${esc(pg.title)}</h1></header>
-    <div class="prose reveal">${marked.parse(pg.content)}</div>
-  </div>
-</article>`,
+    body: `${showHead ? `<article class="wrap page-text"><div class="article">${head}</div></article>` : ''}
+${renderSections(pg.sections)}`,
   }));
 }
 
@@ -561,4 +800,4 @@ ${urls.map((u) => `<url><loc>${baseUrl}${u}</loc></url>`).join('\n')}
   write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${baseUrl}/sitemap.xml\n`);
 }
 
-console.log(`Built ${posts.length} post(s), ${livePages.length} page(s), ${CATEGORIES.length} categor${CATEGORIES.length === 1 ? 'y' : 'ies'}, ${tagMap.size} tag page(s) into dist/`);
+console.log(`Built ${posts.length} post(s), ${livePages.length} page(s), ${CATEGORIES.length} categor${CATEGORIES.length === 1 ? 'y' : 'ies'}, ${dropdowns.length} dropdown(s), ${tagMap.size} tag page(s) into dist/`);

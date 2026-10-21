@@ -30,6 +30,55 @@ window.__erReady = true;
   }
 
 
+
+  /* ---- Navigation: mobile menu and dropdowns ---- */
+  var toggle = d.querySelector('.nav-toggle');
+  var nav = d.getElementById('site-nav');
+  var subs = d.querySelectorAll('.has-sub');
+  function closeSubs(except) {
+    for (var q = 0; q < subs.length; q++) {
+      if (subs[q] === except) continue;
+      subs[q].classList.remove('open');
+      var b = subs[q].querySelector('.sub-toggle');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    }
+  }
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var o = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', o ? 'true' : 'false');
+    });
+  }
+  for (var n = 0; n < subs.length; n++) {
+    (function (sub) {
+      var btn = sub.querySelector('.sub-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var opening = !sub.classList.contains('open');
+        closeSubs(opening ? sub : null);
+        sub.classList.toggle('open', opening);
+        btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      });
+      sub.addEventListener('focusout', function (e) {
+        if (!sub.contains(e.relatedTarget)) {
+          sub.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })(subs[n]);
+  }
+  d.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('.has-sub')) closeSubs(null);
+  });
+  d.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var openSub = d.querySelector('.has-sub.open');
+    closeSubs(null);
+    if (openSub) { var b2 = openSub.querySelector('.sub-toggle'); if (b2) b2.focus(); }
+    else if (toggle && nav && nav.classList.contains('open')) { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
+  });
+
   /* ---- Hero background slideshow (only when more than one image) ---- */
   var heroImgs = d.querySelectorAll('.hero-bg img');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
