@@ -1,7 +1,7 @@
 {
   "categories": [
     {
-      "name": "Word from God",
+      "name": "Bible Studies",
       "description": "Reflections and encouragement from the Word.",
       "slug": "word-from-god"
     },
@@ -14,6 +14,15 @@
       "name": "Life & Fictional Story",
       "description": "Stories from real life, and stories imagined.",
       "slug": "life-and-fiction"
+    },
+    {
+      "name": "Biblical Teachings"
+    },
+    {
+      "name": "Scripture Reflections"
+    },
+    {
+      "name": "Christian Living"
     }
   ]
 }
