@@ -4,10 +4,6 @@
       "items": [
         {
           "type": "category",
-          "category": "Word from God"
-        },
-        {
-          "type": "category",
           "category": "Bible Studies"
         },
         {
@@ -23,7 +19,7 @@
           "category": "Christian Living"
         }
       ],
-      "label": "Word From God"
+      "label": "WORD FROM GOD"
     }
   ]
 }
