@@ -48,6 +48,24 @@
         "fg": "#090909"
       },
       "category": ""
+    },
+    {
+      "type": "buttons",
+      "style": {
+        "overlay": 40,
+        "align": "Left",
+        "spacing": "Medium"
+      },
+      "heading": "A short note from the writer",
+      "text": "Behind the words\n\nEvery piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing, and fiction.\n\nThis is a space for exploring ideas, expressing experiences, and telling stories with purpose.",
+      "buttons": [
+        {
+          "style": "Filled",
+          "new_tab": false,
+          "label": "Meet the Writer",
+          "link": "https://everrockwrite.netlify.app/about-the-writer/"
+        }
+      ]
     }
   ],
   "hero_text": "Some words help us understand faith. Others give shape to feelings we struggle to express. Some take us into stories that exist only in imagination.\n\nEverRock Write is a home for biblical reflections, poetry, life experiences, and original fiction. A place to explore Scripture, reflect on life, and share stories worth reading",
