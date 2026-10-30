@@ -43,7 +43,9 @@
       "style": {
         "overlay": 40,
         "align": "Left",
-        "spacing": "Medium"
+        "spacing": "Medium",
+        "bg": "#5c84b3",
+        "fg": "#090909"
       },
       "category": ""
     }
