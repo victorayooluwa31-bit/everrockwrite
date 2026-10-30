@@ -71,6 +71,31 @@
           "category": "Life Experiences"
         }
       ]
+    },
+    {
+      "label": "FICTION",
+      "items": [
+        {
+          "type": "category",
+          "category": "Short Stories"
+        },
+        {
+          "type": "category",
+          "category": "Romance & Relationships"
+        },
+        {
+          "type": "category",
+          "category": "Drama"
+        },
+        {
+          "type": "category",
+          "category": "Mystery & Suspense"
+        },
+        {
+          "type": "category",
+          "category": "Inspirational Fiction"
+        }
+      ]
     }
   ]
 }
