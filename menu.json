@@ -23,7 +23,29 @@
       "label": "WORD FROM GOD"
     },
     {
-      "label": "POETRY"
+      "label": "POETRY",
+      "items": [
+        {
+          "type": "category",
+          "category": "Faith & Spirituality"
+        },
+        {
+          "type": "category",
+          "category": "Love & Relationships"
+        },
+        {
+          "type": "category",
+          "category": "Life & Growth"
+        },
+        {
+          "type": "category",
+          "category": "Pain & Healing"
+        },
+        {
+          "type": "category",
+          "category": "Hope & Inspiration"
+        }
+      ]
     }
   ]
 }
