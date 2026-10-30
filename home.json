@@ -35,6 +35,17 @@
           "label": "Explore Bible Studies"
         }
       ]
+    },
+    {
+      "type": "latest_posts",
+      "title": "Latest writing",
+      "count": 3,
+      "style": {
+        "overlay": 40,
+        "align": "Left",
+        "spacing": "Medium"
+      },
+      "category": ""
     }
   ],
   "hero_text": "Some words help us understand faith. Others give shape to feelings we struggle to express. Some take us into stories that exist only in imagination.\n\nEverRock Write is a home for biblical reflections, poetry, life experiences, and original fiction. A place to explore Scripture, reflect on life, and share stories worth reading",
