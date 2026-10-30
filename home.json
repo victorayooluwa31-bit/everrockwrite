@@ -3,7 +3,28 @@
   "button_2_text": "",
   "button_1_text": "",
   "hero_overlay": 25,
-  "sections": [],
+  "sections": [
+    {
+      "type": "image_text",
+      "side": "Left",
+      "style": {
+        "overlay": 40,
+        "align": "Left",
+        "spacing": "Medium"
+      },
+      "image": "/uploads/chatgpt-image-aug-20-2026-07_14_20-pm.png",
+      "heading": "Word from God",
+      "body": "Biblical teachings, Scripture reflections, and studies that explore what the Bible says and how it applies to everyday life.",
+      "buttons": [
+        {
+          "style": "Outline",
+          "new_tab": false,
+          "link": "https://everrockwrite.netlify.app/word-from-god/",
+          "label": "Explore Bible Studies"
+        }
+      ]
+    }
+  ],
   "hero_text": "Some words help us understand faith. Others give shape to feelings we struggle to express. Some take us into stories that exist only in imagination.\n\nEverRock Write is a home for biblical reflections, poetry, life experiences, and original fiction. A place to explore Scripture, reflect on life, and share stories worth reading",
   "button_2_link": "",
   "button_1_link": "",
