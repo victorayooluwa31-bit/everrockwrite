@@ -9,7 +9,7 @@
       "style": {
         "overlay": 40,
         "align": "Left",
-        "spacing": "Medium",
+        "spacing": "Small",
         "bg": "#05132a",
         "fg": "#ffffff"
       },
