@@ -102,7 +102,11 @@
       "items": [
         {
           "type": "page",
-          "page": "About"
+          "page": "About EverRock Write"
+        },
+        {
+          "type": "page",
+          "page": "About the Writer"
         }
       ]
     }
