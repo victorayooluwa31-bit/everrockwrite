@@ -103,10 +103,6 @@
         {
           "type": "page",
           "page": "About"
-        },
-        {
-          "type": "category",
-          "category": "About the Writer"
         }
       ]
     }
