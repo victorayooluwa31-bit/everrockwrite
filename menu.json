@@ -46,6 +46,31 @@
           "category": "Hope & Inspiration"
         }
       ]
+    },
+    {
+      "label": "LIFE STORIES",
+      "items": [
+        {
+          "type": "category",
+          "category": "Personal Reflections"
+        },
+        {
+          "type": "category",
+          "category": "Lessons from Life"
+        },
+        {
+          "type": "category",
+          "category": "Relationships"
+        },
+        {
+          "type": "category",
+          "category": "Personal Growth"
+        },
+        {
+          "type": "category",
+          "category": "Life Experiences"
+        }
+      ]
     }
   ]
 }
