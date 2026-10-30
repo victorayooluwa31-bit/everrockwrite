@@ -5,6 +5,18 @@
   "hero_overlay": 25,
   "sections": [
     {
+      "type": "quote",
+      "style": {
+        "overlay": 40,
+        "align": "Left",
+        "spacing": "Medium",
+        "bg": "#05132a",
+        "fg": "#ffffff"
+      },
+      "text": "The starting point is always hard, the middle will be rough, but only those who make it to the end will enjoy the sweetness of the pain.",
+      "source": "Victor Ogunleye"
+    },
+    {
       "type": "image_text",
       "side": "Left",
       "style": {
