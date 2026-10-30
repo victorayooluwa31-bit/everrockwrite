@@ -53,8 +53,8 @@
       "type": "buttons",
       "style": {
         "overlay": 40,
-        "align": "Left",
-        "spacing": "Medium"
+        "align": "Center",
+        "spacing": "Small"
       },
       "heading": "A short note from the writer",
       "text": "Behind the words\n\nEvery piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing, and fiction.\n\nThis is a space for exploring ideas, expressing experiences, and telling stories with purpose.",
