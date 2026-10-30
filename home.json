@@ -3,10 +3,12 @@
   "button_2_text": "",
   "button_1_text": "",
   "hero_overlay": 60,
-  "hero_text": "Reflections from the Word, poems, and stories drawn from life and imagination.",
+  "hero_text": "Words with purpose.\n\nSome words help us understand faith. Others give shape to feelings we struggle to express. Some take us into stories that exist only in imagination.\n\nEverRock Write is a home for biblical reflections, poetry, life experiences, and original fiction. A place to explore Scripture, reflect on life, and share stories worth reading",
   "button_2_link": "",
   "button_1_link": "",
-  "hero_images": [],
-  "hero_heading": "Words with purpose.",
+  "hero_images": [
+    "/uploads/jotter-with-pen.jfif"
+  ],
+  "hero_heading": "EverRock Write",
   "show_categories": true
 }
