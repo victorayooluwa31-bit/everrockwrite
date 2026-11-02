@@ -54,8 +54,12 @@
             "url": "/about-the-writer/"
           },
           {
-            "label": "Contact",
-            "url": "/contact/"
+            "label": "Privacy Policy",
+            "url": "/privacy/"
+          },
+          {
+            "label": "Copyright",
+            "url": "/copyright/"
           }
         ]
       }
