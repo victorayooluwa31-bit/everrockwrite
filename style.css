@@ -2,9 +2,9 @@
    Colours below are defaults. Anything set in the admin (Site settings, Home page,
    or a section's colours) overrides them. */
 :root {
-  --ink: #262722;
-  --bg: #F8F5EF;
-  --accent: #294B3A;
+  --ink: #101D34;
+  --bg: #F7F8FB;
+  --accent: #0B1B35;
   --muted: color-mix(in srgb, var(--ink) 68%, var(--bg));
   --rule: color-mix(in srgb, var(--ink) 16%, var(--bg));
   --surface: color-mix(in srgb, var(--ink) 5%, var(--bg));
@@ -151,7 +151,7 @@ html:not(.js) .has-sub:hover .sub { display: block; }
 .blk .prose { margin-top: 0; }
 .blk .prose > :last-child { margin-bottom: 0; }
 .blk .section-title { margin-bottom: 1.5rem; }
-.blk-in { max-width: var(--read); }
+.blk-in { max-width: var(--section-content-width, var(--read)); }
 .blk-in.wide { max-width: none; }
 .blk.center .blk-in { margin-inline: auto; text-align: center; }
 .blk.center .btn-row { justify-content: center; }
@@ -164,7 +164,8 @@ html:not(.js) .has-sub:hover .sub { display: block; }
   .split { grid-template-columns: 1fr 1fr; gap: 3.5rem; }
   .split.img-right .split-img { order: 2; }
 }
-.split-img img { width: 100%; border-radius: 4px; }
+.split-img img { width: 100%; border-radius: 4px; display: block; }
+.blk .pic { max-width: var(--section-content-width, var(--wrap)); margin-left: auto; margin-right: auto; }
 .pic { margin: 0; }
 .pic img { width: 100%; border-radius: 4px; }
 .full .pic img { border-radius: 0; }

@@ -41,6 +41,26 @@ const safeUrl = (u) => {
 };
 const isExternal = (u) => /^(https?:)?\/\//i.test(u);
 const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+const cssLength = (v, fallback = '') => {
+  const s = str(v);
+  return /^(?:0|auto|(?:\d+(?:\.\d+)?)(?:px|rem|em|%|vw|vh))(?:\s+(?:0|auto|(?:\d+(?:\.\d+)?)(?:px|rem|em|%|vw|vh))){0,3}$/i.test(s) ? s : fallback;
+};
+function mediaStyle(s) {
+  const st = s && typeof s === 'object' ? s : {};
+  const border = hex(st.image_border_color);
+  const width = cssLength(st.image_width), height = cssLength(st.image_height);
+  const padding = cssLength(st.image_padding), margin = cssLength(st.image_margin);
+  const bw = Number(st.image_border_width), radius = cssLength(st.image_border_radius);
+  const fit = ['cover', 'contain', 'fill'].includes(str(st.image_fit).toLowerCase()) ? str(st.image_fit).toLowerCase() : '';
+  return [
+    width ? `width:${width}` : '', height ? `height:${height}` : '',
+    fit ? `object-fit:${fit}` : '',
+    border && isFinite(bw) && bw > 0 ? `border:${clamp(bw, 0, 20)}px solid ${border}` : '',
+    radius ? `border-radius:${radius}` : '', padding ? `padding:${padding}` : '',
+    margin ? `margin:${margin}` : '', width || height ? 'max-width:100%' : ''
+  ].filter(Boolean).join(';');
+}
+const styleAttr = (value) => value ? ` style="${esc(value)}"` : '';
 
 function readJSON(file) {
   const p = path.join(root, file);
@@ -480,10 +500,20 @@ function shell(s, inner) {
   ov = clamp(ov, 0, 90) / 100;
   const sp = SPACING[str(st.spacing).toLowerCase()] || 'sp-md';
   const center = str(st.align).toLowerCase() === 'center' ? ' center' : '';
+  const pt = cssLength(st.padding_top), pb = cssLength(st.padding_bottom);
+  const mt = cssLength(st.margin_top), mb = cssLength(st.margin_bottom);
+  const borderColor = hex(st.border_color), borderWidth = Number(st.border_width);
+  const borderRadius = cssLength(st.border_radius);
+  const borderStyle = ['solid', 'dashed', 'dotted', 'double'].includes(str(st.border_style).toLowerCase()) ? str(st.border_style).toLowerCase() : 'solid';
+  const contentWidth = cssLength(st.content_width);
   // Colours are set as --bg / --ink on the section so everything inside it (buttons, lines, muted text) follows
-  const vars = [bg ? `background:${bg};--bg:${bg}` : '', fg ? `color:${fg};--ink:${fg}` : '', img ? `--ov:${ov}` : '']
-    .filter(Boolean)
-    .join(';');
+  const vars = [
+    bg ? `background:${bg};--bg:${bg}` : '', fg ? `color:${fg};--ink:${fg}` : '',
+    img ? `--ov:${ov}` : '', pt ? `padding-top:${pt}` : '', pb ? `padding-bottom:${pb}` : '',
+    mt ? `margin-top:${mt}` : '', mb ? `margin-bottom:${mb}` : '',
+    borderColor && isFinite(borderWidth) && borderWidth > 0 ? `border:${clamp(borderWidth, 0, 20)}px ${borderStyle} ${borderColor}` : '',
+    borderRadius ? `border-radius:${borderRadius}` : '', contentWidth ? `--section-content-width:${contentWidth}` : ''
+  ].filter(Boolean).join(';');
   return `<section class="blk blk-${esc(s.type)} ${sp}${center}${img ? ' has-img' : ''}"${vars ? ` style="${vars}"` : ''}>
 ${img ? `<img class="blk-bgimg" src="${esc(img)}" alt="" loading="lazy"><div class="blk-shade"></div>` : ''}
 ${inner}
@@ -559,14 +589,14 @@ function renderBlock(s) {
       const right = str(s.side).toLowerCase() === 'right';
       return shell(
         s,
-        `<div class="wrap"><div class="split${right ? ' img-right' : ''} reveal"><div class="split-img"><img src="${esc(img)}" alt="${esc(str(s.alt))}" loading="lazy"></div><div class="split-text">${heading(s)}${prose(s.body)}${buttonsHtml(s.buttons)}</div></div></div>`
+        `<div class="wrap"><div class="split${right ? ' img-right' : ''} reveal"><div class="split-img"><img src="${esc(img)}" alt="${esc(str(s.alt))}" loading="lazy"${styleAttr(mediaStyle(s))}></div><div class="split-text">${heading(s)}${prose(s.body)}${buttonsHtml(s.buttons)}</div></div></div>`
       );
     }
     case 'image': {
       const img = safeUrl(s.image);
       if (!img) return '';
       const full = str(s.size).toLowerCase().startsWith('full');
-      const fig = `<figure class="pic reveal"><img src="${esc(img)}" alt="${esc(str(s.alt))}" loading="lazy">${str(s.caption) ? `<figcaption>${esc(str(s.caption))}</figcaption>` : ''}</figure>`;
+      const fig = `<figure class="pic reveal"><img src="${esc(img)}" alt="${esc(str(s.alt))}" loading="lazy"${styleAttr(mediaStyle(s))}>${str(s.caption) ? `<figcaption>${esc(str(s.caption))}</figcaption>` : ''}</figure>`;
       return shell(s, full ? `<div class="full">${fig}</div>` : `<div class="wrap">${fig}</div>`);
     }
     case 'buttons':

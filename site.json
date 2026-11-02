@@ -7,14 +7,14 @@
   "url": "https://everrockwrite.netlify.app",
   "goatcounter": "everrockwrite",
   "colors": {
-    "text": "#262722",
-    "background": "#F8F5EF",
-    "accent": "#294B3A",
-    "header_bg": "#F8F5EF",
-    "header_text": "#262722",
-    "footer_bg": "#E9E1D4",
-    "footer_text": "#262722",
-    "button": "#294B3A",
+    "text": "#101D34",
+    "background": "#F7F8FB",
+    "accent": "#0B1B35",
+    "header_bg": "#FFFFFF",
+    "header_text": "#101D34",
+    "footer_bg": "#E9EDF3",
+    "footer_text": "#101D34",
+    "button": "#0B1B35",
     "button_text": "#FFFFFF"
   },
   "footer": {

@@ -101,6 +101,15 @@ collections:
                   - { label: Darkness over the background image, name: overlay, widget: number, value_type: int, min: 0, max: 90, step: 5, default: 40, required: false, hint: "Makes text easier to read on photos. 0 = none, 90 = almost black." }
                   - { label: Text alignment, name: align, widget: select, options: ["Left", "Center"], default: "Left", required: false }
                   - { label: Space above and below, name: spacing, widget: select, options: ["None", "Small", "Medium", "Large"], default: "Medium", required: false }
+                  - { label: Top padding (CSS size), name: padding_top, widget: string, required: false, hint: "Examples: 24px, 2rem, 5%. Leave empty to use the spacing preset." }
+                  - { label: Bottom padding (CSS size), name: padding_bottom, widget: string, required: false, hint: "Examples: 24px, 2rem, 5%." }
+                  - { label: Top margin (CSS size), name: margin_top, widget: string, required: false, hint: "Examples: 0px, 1rem, 4%." }
+                  - { label: Bottom margin (CSS size), name: margin_bottom, widget: string, required: false, hint: "Examples: 0px, 1rem, 4%." }
+                  - { label: Section border color, name: border_color, widget: color, allowInput: true, required: false }
+                  - { label: Section border thickness (px), name: border_width, widget: number, value_type: int, min: 0, max: 20, default: 0, required: false }
+                  - { label: Section border style, name: border_style, widget: select, options: ["Solid", "Dashed", "Dotted", "Double"], default: "Solid", required: false }
+                  - { label: Section corner radius (CSS size), name: border_radius, widget: string, required: false, hint: "Examples: 8px or 1rem." }
+                  - { label: Content maximum width (CSS size), name: content_width, widget: string, required: false, hint: "Examples: 720px, 60rem, 90%. Leave empty for normal width." }
           - label: Image with text
             name: image_text
             widget: object
@@ -109,6 +118,14 @@ collections:
               - { label: Image, name: image, widget: image }
               - { label: Image description (for screen readers), name: alt, widget: string, required: false }
               - { label: Image position, name: side, widget: select, options: ["Left", "Right"], default: "Left", required: false }
+              - { label: Image width (CSS size), name: image_width, widget: string, required: false, hint: "Examples: 420px, 50%, 32rem. Leave empty for automatic width." }
+              - { label: Image height (CSS size), name: image_height, widget: string, required: false, hint: "Examples: 300px, 24rem, 60vh. Leave empty to preserve image ratio." }
+              - { label: Image fit, name: image_fit, widget: select, options: ["Cover", "Contain", "Fill"], default: "Cover", required: false }
+              - { label: Image border color, name: image_border_color, widget: color, allowInput: true, required: false }
+              - { label: Image border thickness (px), name: image_border_width, widget: number, value_type: int, min: 0, max: 20, default: 0, required: false }
+              - { label: Image corner radius (CSS size), name: image_border_radius, widget: string, required: false, hint: "Examples: 0px, 8px, 50%." }
+              - { label: Image inner padding (CSS size), name: image_padding, widget: string, required: false, hint: "Examples: 8px or 1rem." }
+              - { label: Image outer margin (CSS size), name: image_margin, widget: string, required: false, hint: "Examples: 0 auto or 1rem." }
               - { label: Heading, name: heading, widget: string, required: false }
               - { label: Text, name: body, widget: markdown, required: false }
               - *block_buttons
@@ -122,6 +139,14 @@ collections:
               - { label: Image description (for screen readers), name: alt, widget: string, required: false }
               - { label: Caption, name: caption, widget: string, required: false }
               - { label: Size, name: size, widget: select, options: ["Contained", "Full width"], default: "Contained", required: false }
+              - { label: Image width (CSS size), name: image_width, widget: string, required: false, hint: "Examples: 420px, 50%, 32rem. Leave empty for automatic width." }
+              - { label: Image height (CSS size), name: image_height, widget: string, required: false, hint: "Examples: 300px, 24rem, 60vh. Leave empty to preserve image ratio." }
+              - { label: Image fit, name: image_fit, widget: select, options: ["Cover", "Contain", "Fill"], default: "Cover", required: false }
+              - { label: Image border color, name: image_border_color, widget: color, allowInput: true, required: false }
+              - { label: Image border thickness (px), name: image_border_width, widget: number, value_type: int, min: 0, max: 20, default: 0, required: false }
+              - { label: Image corner radius (CSS size), name: image_border_radius, widget: string, required: false, hint: "Examples: 0px, 8px, 50%." }
+              - { label: Image inner padding (CSS size), name: image_padding, widget: string, required: false, hint: "Examples: 8px or 1rem." }
+              - { label: Image outer margin (CSS size), name: image_margin, widget: string, required: false, hint: "Examples: 0 auto or 1rem." }
               - *block_style
           - label: Call to action (heading and buttons)
             name: buttons
