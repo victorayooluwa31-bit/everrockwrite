@@ -6,84 +6,84 @@
   "sections": [
     {
       "type": "quote",
-      "style": {
-        "overlay": 40,
-        "align": "Left",
-        "spacing": "Small",
-        "bg": "#05132a",
-        "fg": "#ffffff"
-      },
       "text": "The starting point is always hard, the middle will be rough, but only those who make it to the end will enjoy the sweetness of the pain.",
-      "source": "Victor Ogunleye"
+      "source": "Victor Ogunleye",
+      "style": {
+        "spacing": "Small",
+        "bg": "#294B3A",
+        "fg": "#FFFFFF",
+        "align": "Center"
+      }
     },
     {
-      "type": "image_text",
-      "side": "Left",
-      "style": {
-        "overlay": 40,
-        "align": "Left",
-        "spacing": "Medium"
-      },
-      "image": "/uploads/an-open-bible-beside-a-notebook-photographed-in-natural-light..png",
-      "heading": "Word from God",
-      "body": "Biblical teachings, Scripture reflections, and studies that explore what the Bible says and how it applies to everyday life.",
-      "buttons": [
+      "type": "cards",
+      "heading": "Explore EverRock Write",
+      "body": "Four spaces for faith, expression, experience and imagination.",
+      "columns": "2",
+      "cards": [
         {
-          "style": "Outline",
-          "new_tab": false,
-          "link": "https://everrockwrite.netlify.app/word-from-god/",
-          "label": "Explore Bible Studies"
+          "title": "Word from God",
+          "text": "Biblical teachings, Scripture reflections and thoughtful studies for everyday Christian living.",
+          "link": "/word-from-god/",
+          "link_text": "Explore Bible studies"
+        },
+        {
+          "title": "Poetry",
+          "text": "Words about faith, love, growth, pain, healing and hope.",
+          "link": "/poem/",
+          "link_text": "Read the poems"
+        },
+        {
+          "title": "Life Stories",
+          "text": "Personal reflections, relationships, lessons and experiences that shape us.",
+          "link": "/personal-reflections/",
+          "link_text": "Read life stories"
+        },
+        {
+          "title": "Fiction",
+          "text": "Original stories filled with imagination, emotion, mystery and meaning.",
+          "link": "/short-stories/",
+          "link_text": "Explore fiction"
         }
-      ]
+      ],
+      "style": {
+        "spacing": "Large"
+      }
     },
     {
       "type": "latest_posts",
       "title": "Latest writing",
-      "count": 3,
+      "count": 4,
       "style": {
-        "overlay": 40,
-        "align": "Left",
-        "spacing": "Medium",
-        "bg": "#5c84b3",
-        "fg": "#090909"
-      },
-      "category": ""
+        "spacing": "Large"
+      }
     },
     {
       "type": "image_text",
       "side": "Right",
-      "style": {
-        "overlay": 40,
-        "align": "Left",
-        "spacing": "Small"
-      },
       "image": "/uploads/victor-ogunleye-2-.jpeg",
-      "heading": "A short note from the writer",
-      "body": "**Behind the word**\n\nEvery piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\n**EverRock Write** brings these thoughts together through biblical reflections, poetry, personal writing, and fiction.\n\nThis is a space for exploring ideas, expressing experiences, and telling stories with purpose.",
-      "alt": "Image of the writer, the founder and CEO of EverRock Write",
+      "heading": "A note from the writer",
+      "body": "Every piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\\n\\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing and fiction.\\n\\nThis is a space for exploring ideas, expressing experiences and telling stories with purpose.",
+      "alt": "Victor Ogunleye, writer and founder of EverRock Write",
       "buttons": [
         {
-          "style": "Filled",
-          "new_tab": false,
-          "label": "MEET THE WRITER",
-          "link": "https://everrockwrite.netlify.app/about-the-writer/"
-        },
-        {
-          "style": "Outline",
-          "new_tab": false,
-          "label": "READ ABOUT US",
-          "link": "https://everrockwrite.netlify.app/about/"
+          "label": "Meet the writer",
+          "link": "/about-the-writer/",
+          "style": "Filled"
         }
-      ]
+      ],
+      "style": {
+        "spacing": "Large"
+      }
     }
   ],
-  "hero_text": "Some words help us understand faith. Others give shape to feelings we struggle to express. Some take us into stories that exist only in imagination.\n\nEverRock Write is a home for biblical reflections, poetry, life experiences, and original fiction. A place to explore Scripture, reflect on life, and share stories worth reading",
+  "hero_text": "A home for biblical reflections, poetry, life stories and original fiction. Explore Scripture, reflect on life, and discover stories worth reading.",
   "button_2_link": "",
   "button_1_link": "",
   "hero_images": [
     "/uploads/jotter-with-pen.jfif",
     "/uploads/bible-on-the-table-and-pen-with-jotter.jfif"
   ],
-  "hero_heading": "EverRock Write",
-  "show_categories": true
+  "hero_heading": "Words with purpose.",
+  "show_categories": false
 }
