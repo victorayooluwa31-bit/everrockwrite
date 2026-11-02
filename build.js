@@ -109,6 +109,7 @@ const colorVars = {
   button_text: '--btn-fg',
 };
 const rawColors = rawSite.colors && typeof rawSite.colors === 'object' ? rawSite.colors : {};
+const footerSettings = rawSite.footer && typeof rawSite.footer === 'object' ? rawSite.footer : {};
 const colorCss = Object.entries(colorVars)
   .map(([k, v]) => (hex(rawColors[k]) ? `${v}:${hex(rawColors[k])}` : ''))
   .filter(Boolean)
@@ -337,6 +338,29 @@ function layout({ title, description, image, body, current, urlPath, type, noind
   const readLinks =
     CATEGORIES.map((c) => `<li><a href="/${c.slug}/">${esc(c.name)}</a></li>`).join('') +
     menuPages.map((p) => `<li><a href="/${p.slug}/">${esc(p.title)}</a></li>`).join('');
+  const customFooterColumns = Array.isArray(footerSettings.columns) ? footerSettings.columns : [];
+  const footerColumnHtml = customFooterColumns.length
+    ? customFooterColumns.map((col) => {
+        const links = (Array.isArray(col.links) ? col.links : []).map((item) => {
+          const href = safeUrl(item && item.url);
+          const label = str(item && item.label);
+          if (!href || !label) return '';
+          const external = isExternal(href) || (item && item.new_tab === true);
+          return `<li><a href="${esc(href)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(label)}</a></li>`;
+        }).join('');
+        return links ? `<nav aria-label="${esc(str(col.heading) || 'Footer links')}"><h2>${esc(str(col.heading) || 'Explore')}</h2><ul>${links}</ul></nav>` : '';
+      }).join('')
+    : `<nav aria-label="Read"><h2>Explore</h2><ul>${readLinks}</ul></nav>${footerLinks ? `<nav aria-label="Site information"><h2>Information</h2><ul>${footerLinks}</ul></nav>` : ''}`;
+  const footerSocialHtml = (Array.isArray(footerSettings.social_links) ? footerSettings.social_links : []).map((item) => {
+    const href = safeUrl(item && item.url);
+    const label = str(item && item.label);
+    if (!href || !label) return '';
+    return `<li><a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a></li>`;
+  }).join('');
+  const footerDescription = str(footerSettings.description) || site.tagline;
+  const footerCopyright = (str(footerSettings.copyright) || '© {{year}} {{author}}. All rights reserved.')
+    .replace(/\{\{year\}\}/g, String(new Date().getFullYear()))
+    .replace(/\{\{author\}\}/g, site.author);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -382,16 +406,13 @@ ${body}
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="f-brand">
-      <img src="${esc(logoSrc)}" alt="${esc(site.title)}">
-      <p>${esc(site.tagline)}</p>
+      ${footerSettings.show_logo === false ? '' : `<img src="${esc(logoSrc)}" alt="${esc(site.title)}">`}
+      <p>${esc(footerDescription)}</p>
+      ${footerSocialHtml ? `<ul class="footer-social" aria-label="Social links">${footerSocialHtml}</ul>` : ''}
     </div>
-    <nav aria-label="Pages">
-      <h2>Read</h2>
-      <ul>${readLinks}</ul>
-    </nav>
-    ${footerLinks ? `<nav aria-label="Site information"><h2>Site</h2><ul>${footerLinks}</ul></nav>` : ''}
+    ${footerColumnHtml}
   </div>
-  <div class="wrap fine">&copy; ${new Date().getFullYear()} ${esc(site.author)}. All rights reserved.</div>
+  <div class="wrap fine">${esc(footerCopyright)}</div>
 </footer>
 </body>
 </html>`;
@@ -562,6 +583,20 @@ function renderBlock(s) {
           .map((g) => `<li class="reveal"><figure><img src="${esc(g.src)}" alt="${esc(g.cap)}" loading="lazy">${g.cap ? `<figcaption>${esc(g.cap)}</figcaption>` : ''}</figure></li>`)
           .join('')}</ul></div>`
       );
+    }
+    case 'cards': {
+      const items = (Array.isArray(s.cards) ? s.cards : []).filter((item) => str(item && item.title));
+      const columns = [2, 3, 4].includes(parseInt(s.columns, 10)) ? parseInt(s.columns, 10) : 2;
+      const cards = items.map((item) => {
+        const href = safeUrl(item.link);
+        const image = safeUrl(item.image);
+        const title = esc(str(item.title));
+        const description = str(item.text);
+        const linkText = esc(str(item.link_text) || 'Explore');
+        const inner = `${image ? `<img class="content-card-img" src="${esc(image)}" alt="" loading="lazy">` : ''}<div class="content-card-body"><h3>${title}</h3>${description ? `<div class="content-card-copy">${marked.parse(description)}</div>` : ''}${href ? `<span class="content-card-link">${linkText} <span aria-hidden="true">→</span></span>` : ''}</div>`;
+        return href ? `<a class="content-card" href="${esc(href)}">${inner}</a>` : `<article class="content-card">${inner}</article>`;
+      }).join('');
+      return shell(s, `<div class="wrap"><div class="cards-intro">${heading(s)}${prose(s.body)}</div><div class="content-card-grid cols-${columns}">${cards}</div></div>`);
     }
     case 'video': {
       const v = videoEmbed(s.url);

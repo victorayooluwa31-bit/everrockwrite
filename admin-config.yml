@@ -148,6 +148,26 @@ collections:
                   - { label: Caption, name: caption, widget: string, required: false }
               - { label: Photos per row, name: columns, widget: select, options: ["2", "3", "4"], default: "3", required: false }
               - *block_style
+          - label: Cards / category links
+            name: cards
+            widget: object
+            summary: "Cards: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro text, name: body, widget: markdown, required: false }
+              - { label: Cards per row, name: columns, widget: select, options: ["2", "3", "4"], default: "2", required: false }
+              - label: Cards
+                name: cards
+                widget: list
+                label_singular: Card
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Image, name: image, widget: image, required: false }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: text, widget: text, required: false }
+                  - { label: Link, name: link, widget: string, required: false, hint: "Use a page address such as /word-from-god/ or a full external URL." }
+                  - { label: Link text, name: link_text, widget: string, required: false, default: "Explore" }
+              - *block_style
           - label: Video
             name: video
             widget: object
@@ -357,4 +377,41 @@ collections:
           - { label: Main logo, name: logo, widget: image, required: false, hint: "Shown in the footer and in share previews. Leave empty to keep the current logo. A square PNG with a transparent or white background works best." }
           - { label: Header logo, name: header_logo, widget: image, required: false, hint: "A wide version of your logo for the top of the site. Leave empty to use the main logo." }
           - { label: Favicon, name: favicon, widget: image, required: false, hint: "The small icon in the browser tab. Upload a square PNG, about 512 x 512 px. Leave empty to keep the current one." }
+          - label: Footer content and layout
+            name: footer
+            widget: object
+            collapsed: false
+            required: false
+            hint: "Edit the footer shown at the bottom of every page. Add columns and links, then drag them into the order you want."
+            fields:
+              - { label: Footer description, name: description, widget: text, required: false }
+              - { label: Show logo, name: show_logo, widget: boolean, default: true, required: false }
+              - label: Link columns
+                name: columns
+                widget: list
+                required: false
+                label_singular: Footer column
+                summary: "{{fields.heading}}"
+                fields:
+                  - { label: Column heading, name: heading, widget: string }
+                  - label: Links
+                    name: links
+                    widget: list
+                    required: false
+                    label_singular: Link
+                    summary: "{{fields.label}}"
+                    fields:
+                      - { label: Link text, name: label, widget: string }
+                      - { label: Address, name: url, widget: string, hint: "Use an internal path such as /about/ or a full URL." }
+                      - { label: Open in new tab, name: new_tab, widget: boolean, default: false, required: false }
+              - label: Social links
+                name: social_links
+                widget: list
+                required: false
+                label_singular: Social link
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: Platform / label, name: label, widget: string }
+                  - { label: Profile URL, name: url, widget: string }
+              - { label: Copyright line, name: copyright, widget: string, required: false, default: "© {{year}} {{author}}. All rights reserved.", hint: "You can use {{year}} and {{author}} as automatic placeholders." }
           - { label: GoatCounter code, name: goatcounter, widget: string, required: false, hint: "The part before .goatcounter.com. Leave empty to hide view counts." }
