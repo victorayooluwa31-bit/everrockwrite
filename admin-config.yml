@@ -74,6 +74,24 @@ collections:
               - { label: Heading, name: heading, widget: string, required: false }
               - { label: Text, name: body, widget: markdown, required: false }
               - { label: Width, name: width, widget: select, options: ["Narrow", "Wide"], default: "Narrow", required: false }
+              - label: Text element controls
+                name: text_controls
+                widget: object
+                collapsed: true
+                required: false
+                fields:
+                  - { label: Text width, name: text_width, widget: string, required: false }
+                  - { label: Text height, name: text_height, widget: string, required: false }
+                  - { label: Font size, name: text_font_size, widget: string, required: false }
+                  - { label: Line height, name: text_line_height, widget: string, required: false }
+                  - { label: Text padding above, name: text_padding_top, widget: string, required: false }
+                  - { label: Text padding below, name: text_padding_bottom, widget: string, required: false }
+                  - { label: Text margin above, name: text_margin_top, widget: string, required: false }
+                  - { label: Text margin below, name: text_margin_bottom, widget: string, required: false }
+                  - { label: Text background, name: text_background, widget: color, allowInput: true, required: false }
+                  - { label: Text border color, name: text_border_color, widget: color, allowInput: true, required: false }
+                  - { label: Text border thickness (px), name: text_border_width, widget: number, value_type: int, min: 0, max: 20, required: false }
+                  - { label: Text corner radius, name: text_border_radius, widget: string, required: false }
               - &block_buttons
                 label: Buttons
                 name: buttons
