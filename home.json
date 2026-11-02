@@ -105,17 +105,6 @@
       "image_padding_left": "",
       "type": "image_text",
       "image": "/uploads/victor-ogunleye-2-.jpeg"
-    },
-    {
-      "type": "html",
-      "style": {
-        "overlay": 40,
-        "align": "Left",
-        "spacing": "Medium",
-        "border_width": 0,
-        "border_style": "Solid"
-      },
-      "code": "<div id=\"omnisend-embedded-v2-6ae81bae7442567f36e7c9ef\"></div>"
     }
   ],
   "hero_text": "A home for biblical reflections, poetry, life stories and original fiction. Explore Scripture, reflect on life, and discover stories worth reading.",
