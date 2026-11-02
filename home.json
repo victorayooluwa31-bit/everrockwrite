@@ -69,7 +69,7 @@
           "link": "https://everrockwrite.netlify.app/about-the-writer/"
         },
         {
-          "style": "Filled",
+          "style": "Outline",
           "new_tab": false,
           "label": "READ ABOUT US",
           "link": "https://everrockwrite.netlify.app/about/"
