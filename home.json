@@ -93,6 +93,7 @@
       "image_margin_left": "10px",
       "image_border_width": 4,
       "side": "Right",
+      "image_padding_left": "10px",
       "type": "image_text",
       "image": "/uploads/victor-ogunleye-2-.jpeg"
     }
