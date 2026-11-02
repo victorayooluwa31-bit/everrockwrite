@@ -90,7 +90,7 @@
         "fg": "#ffffff"
       },
       "image_border_color": "#ffffff",
-      "image_margin_left": "20px",
+      "image_margin_left": "10px",
       "image_border_width": 4,
       "side": "Right",
       "type": "image_text",
