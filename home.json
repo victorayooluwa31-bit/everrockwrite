@@ -32,19 +32,22 @@
           "title": "Poetry",
           "text": "Words about faith, love, growth, pain, healing and hope.",
           "link": "/poem/",
-          "link_text": "Read the poems"
+          "link_text": "Read the poems",
+          "image": "/uploads/a-notebook-containing-handwritten-poetry-with-a-pen-resting-beside-it..png"
         },
         {
           "title": "Life Stories",
           "text": "Personal reflections, relationships, lessons and experiences that shape us.",
           "link": "/personal-reflections/",
-          "link_text": "Read life stories"
+          "link_text": "Read life stories",
+          "image": "/uploads/a-quiet-road-a-window-overlooking-a-landscape-or-another-image-suggesting-reflection..png"
         },
         {
           "title": "Fiction",
           "text": "Original stories filled with imagination, emotion, mystery and meaning.",
           "link": "/short-stories/",
-          "link_text": "Explore fiction"
+          "link_text": "Explore fiction",
+          "image": "/uploads/an-open-novel-beside-a-reading-lamp-or-an-original-story-illustration..png"
         }
       ],
       "style": {
