@@ -79,7 +79,8 @@
       "image_fit": "Fill",
       "style": {
         "spacing": "Small",
-        "border_style": "Double"
+        "border_style": "Double",
+        "align": "Left"
       },
       "image_border_color": "#101d34",
       "image_border_width": 4,
