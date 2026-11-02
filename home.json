@@ -50,19 +50,22 @@
       "category": ""
     },
     {
-      "type": "buttons",
+      "type": "image_text",
+      "side": "Right",
       "style": {
         "overlay": 40,
-        "align": "Center",
-        "spacing": "Small"
+        "align": "Left",
+        "spacing": "Medium"
       },
+      "image": "/uploads/victor-ogunleye-2-.jpeg",
       "heading": "A short note from the writer",
-      "text": "Behind the words\n\nEvery piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing, and fiction.\n\nThis is a space for exploring ideas, expressing experiences, and telling stories with purpose.",
+      "body": "**Behind the word**\n\nEvery piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\n**EverRock Write** brings these thoughts together through biblical reflections, poetry, personal writing, and fiction.\n\nThis is a space for exploring ideas, expressing experiences, and telling stories with purpose.",
+      "alt": "Image of the writer, the founder and CEO of EverRock Write",
       "buttons": [
         {
           "style": "Filled",
-          "new_tab": false,
-          "label": "Meet the Writer",
+          "new_tab": true,
+          "label": "MEET THE WRITER",
           "link": "https://everrockwrite.netlify.app/about-the-writer/"
         }
       ]
