@@ -55,7 +55,7 @@
       "style": {
         "overlay": 40,
         "align": "Left",
-        "spacing": "Medium"
+        "spacing": "Small"
       },
       "image": "/uploads/victor-ogunleye-2-.jpeg",
       "heading": "A short note from the writer",
@@ -64,9 +64,15 @@
       "buttons": [
         {
           "style": "Filled",
-          "new_tab": true,
+          "new_tab": false,
           "label": "MEET THE WRITER",
           "link": "https://everrockwrite.netlify.app/about-the-writer/"
+        },
+        {
+          "style": "Filled",
+          "new_tab": false,
+          "label": "READ ABOUT US",
+          "link": "https://everrockwrite.netlify.app/about/"
         }
       ]
     }
