@@ -228,6 +228,7 @@ collections:
               - { label: Heading, name: heading, widget: string, required: false }
               - { label: Intro text, name: body, widget: markdown, required: false }
               - { label: Cards per row, name: columns, widget: select, options: ["2", "3", "4"], default: "2", required: false }
+              - { label: Display as a horizontal carousel, name: carousel, widget: boolean, default: false, required: false, hint: "Readers can scroll through the cards using arrow controls." }
               - label: Cards
                 name: cards
                 widget: list

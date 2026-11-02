@@ -61,7 +61,8 @@
       "style": {
         "spacing": "Small",
         "bg": "#ffffff"
-      }
+      },
+      "carousel": true
     },
     {
       "type": "latest_posts",

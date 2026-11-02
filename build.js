@@ -656,7 +656,9 @@ function renderBlock(s) {
         const inner = `${image ? `<img class="content-card-img" src="${esc(image)}" alt="" loading="lazy">` : ''}<div class="content-card-body"><h3>${title}</h3>${description ? `<div class="content-card-copy">${marked.parse(description)}</div>` : ''}${href ? `<span class="content-card-link">${linkText} <span aria-hidden="true">→</span></span>` : ''}</div>`;
         return href ? `<a class="content-card" href="${esc(href)}"${styleAttr(cardStyle)}>${inner}</a>` : `<article class="content-card"${styleAttr(cardStyle)}>${inner}</article>`;
       }).join('');
-      return shell(s, `<div class="wrap"><div class="cards-intro">${heading(s)}${prose(s.body)}</div><div class="content-card-grid cols-${columns}">${cards}</div></div>`);
+      const carousel = s.carousel === true || String(s.carousel).toLowerCase() === "true";
+      const grid = `<div class="content-card-grid cols-${columns}${carousel ? " is-carousel" : ""}"${carousel ? ` id="cards-${Math.random().toString(36).slice(2, 8)}"` : ""}>${cards}</div>`;
+      return shell(s, `<div class="wrap"><div class="cards-intro">${heading(s)}${prose(s.body)}</div>${carousel ? `<div class="cards-carousel" data-cards-carousel><button class="carousel-arrow prev" type="button" aria-label="Previous cards">‹</button>${grid}<button class="carousel-arrow next" type="button" aria-label="Next cards">›</button></div>` : grid}</div>`);
     }
     case 'video': {
       const v = videoEmbed(s.url);

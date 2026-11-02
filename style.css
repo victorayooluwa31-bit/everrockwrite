@@ -319,3 +319,12 @@ figcaption, .cap { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
   .swoosh path { stroke-dashoffset: 0; }
   .hero-bg img { transform: none; }
 }
+
+/* Homepage card carousel */
+.cards-carousel{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.65rem}
+.cards-carousel .content-card-grid.is-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:1.25rem;padding:.35rem .1rem 1rem;scrollbar-width:thin}
+.cards-carousel .is-carousel>.content-card{flex:0 0 min(290px,82%);scroll-snap-align:start}
+.cards-carousel .carousel-arrow{width:2.6rem;height:2.6rem;border:1px solid var(--rule);border-radius:50%;background:var(--bg);color:var(--ink);font-size:1.6rem;line-height:1;cursor:pointer}
+.cards-carousel .carousel-arrow:hover{border-color:var(--accent);background:var(--surface)}
+@media(max-width:520px){.cards-carousel{grid-template-columns:minmax(0,1fr)}.cards-carousel .carousel-arrow{position:absolute;z-index:2;top:42%;background:var(--bg);box-shadow:0 2px 12px rgb(0 0 0 / .15)}.cards-carousel .carousel-arrow.prev{left:.35rem}.cards-carousel .carousel-arrow.next{right:.35rem}}
+@media(prefers-reduced-motion:reduce){.cards-carousel .content-card-grid.is-carousel{scroll-behavior:auto}}
