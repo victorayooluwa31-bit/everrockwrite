@@ -43,7 +43,7 @@ const isExternal = (u) => /^(https?:)?\/\//i.test(u);
 const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
 const cssLength = (v, fallback = '') => {
   const s = str(v);
-  return /^(?:0|(?:\\d+(?:\\.\\d+)?)(?:px|rem|em|%|vw|vh))$/i.test(s) ? s : fallback;
+  return /^(?:0|auto|(?:\d+(?:\.\d+)?)(?:px|rem|em|%|vw|vh))(?:\s+(?:0|auto|(?:\d+(?:\.\d+)?)(?:px|rem|em|%|vw|vh))){0,3}$/i.test(s) ? s : fallback;
 };
 function mediaStyle(s) {
   const st = s && typeof s === 'object' ? s : {};
