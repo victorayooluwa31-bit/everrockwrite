@@ -1,22 +1,21 @@
 {
-  "title": "EverRock Write",
-  "tagline": "Biblical reflections, poetry and stories with purpose.",
-  "author": "Victor Ogunleye",
-  "hero_heading": "Words with purpose.",
-  "hero_text": "Reflections from the Word, poems, and stories drawn from life and imagination.",
-  "url": "https://everrockwrite.netlify.app",
   "goatcounter": "everrockwrite",
+  "author": "EverRock Write",
+  "tagline": "Biblical reflections, poetry and stories with purpose.",
+  "url": "https://everrockwrite.netlify.app",
   "colors": {
+    "footer_bg": "#E9EDF3",
+    "accent": "#0B1B35",
     "text": "#101D34",
     "background": "#F7F8FB",
-    "accent": "#0B1B35",
-    "header_bg": "#FFFFFF",
-    "header_text": "#101D34",
-    "footer_bg": "#E9EDF3",
     "footer_text": "#101D34",
     "button": "#0B1B35",
-    "button_text": "#FFFFFF"
+    "header_bg": "#FFFFFF",
+    "button_text": "#FFFFFF",
+    "header_text": "#101D34"
   },
+  "hero_text": "Reflections from the Word, poems, and stories drawn from life and imagination.",
+  "title": "EverRock Write",
   "footer": {
     "description": "A home for biblical reflections, poetry, life stories and original fiction. Words with purpose, written to encourage, challenge and inspire.",
     "show_logo": true,
@@ -66,5 +65,6 @@
     ],
     "social_links": [],
     "copyright": "© {{year}} {{author}}. All rights reserved."
-  }
+  },
+  "hero_heading": "Words with purpose."
 }
