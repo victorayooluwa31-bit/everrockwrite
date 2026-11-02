@@ -17,3 +17,8 @@
   from = "/api/inbox/*"
   to = "/.netlify/functions/inbox/:splat"
   status = 200
+
+[[redirects]]
+  from = "/api/inbox"
+  to = "/.netlify/functions/inbox/messages"
+  status = 200
