@@ -1,9 +1,66 @@
 {
   "title": "EverRock Write",
-  "tagline": "Words with purpose",
-  "author": "EverRock Write",
+  "tagline": "Biblical reflections, poetry and stories with purpose.",
+  "author": "Victor Ogunleye",
   "hero_heading": "Words with purpose.",
   "hero_text": "Reflections from the Word, poems, and stories drawn from life and imagination.",
   "url": "https://everrockwrite.netlify.app",
-  "goatcounter": "<script data-goatcounter=\"https://everrockwrite.goatcounter.com/count\"         async src=\"//gc.zgo.at/count.js\"></script>"
+  "goatcounter": "everrockwrite",
+  "colors": {
+    "text": "#262722",
+    "background": "#F8F5EF",
+    "accent": "#294B3A",
+    "header_bg": "#F8F5EF",
+    "header_text": "#262722",
+    "footer_bg": "#E9E1D4",
+    "footer_text": "#262722",
+    "button": "#294B3A",
+    "button_text": "#FFFFFF"
+  },
+  "footer": {
+    "description": "A home for biblical reflections, poetry, life stories and original fiction. Words with purpose, written to encourage, challenge and inspire.",
+    "show_logo": true,
+    "columns": [
+      {
+        "heading": "Explore",
+        "links": [
+          {
+            "label": "Word from God",
+            "url": "/word-from-god/"
+          },
+          {
+            "label": "Poetry",
+            "url": "/poem/"
+          },
+          {
+            "label": "Life Stories",
+            "url": "/personal-reflections/"
+          },
+          {
+            "label": "Fiction",
+            "url": "/short-stories/"
+          }
+        ]
+      },
+      {
+        "heading": "About",
+        "links": [
+          {
+            "label": "About EverRock Write",
+            "url": "/about/"
+          },
+          {
+            "label": "About the Writer",
+            "url": "/about-the-writer/"
+          },
+          {
+            "label": "Contact",
+            "url": "/contact/"
+          }
+        ]
+      }
+    ],
+    "social_links": [],
+    "copyright": "© {{year}} {{author}}. All rights reserved."
+  }
 }
