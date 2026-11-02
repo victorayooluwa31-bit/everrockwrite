@@ -5,10 +5,6 @@ placement: Menu
 menu_order: 50
 sections: []
 ---
-
-
-![A young African CEO and writer](/uploads/victor-ogunleye-2-.jpeg "Victor Ogunleye")
-
 My name is **VICTOR OGUNLEYE**. I come from a humble family of seven. I am the first son and the eldest male child, although I have an older sister. Growing up, I often wondered how people could live in a world free from problems, but I never found an answer. What I did discover, however, was my passion and talent for writing.
 
 I discovered my talent for writing when I joined an organisation at the age of 20. Before then, I had always been passionate about preaching and sharing encouraging words with people, a passion I developed when I was about 17 or even earlier. I had even written a storybook, but because of my lack of self-confidence, I could not bring myself to show it to anyone.
