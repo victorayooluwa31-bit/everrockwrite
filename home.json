@@ -78,7 +78,8 @@
       "image_height": "400px",
       "image_fit": "Cover",
       "style": {
-        "spacing": "Small"
+        "spacing": "Small",
+        "border_style": "Double"
       },
       "image_border_color": "#101d34",
       "image_border_width": 4,
