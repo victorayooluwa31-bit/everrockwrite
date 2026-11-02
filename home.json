@@ -76,7 +76,7 @@
       "heading": "A Note From The Writer",
       "alt": "Victor Ogunleye, writer and founder of EverRock Write",
       "image_height": "400px",
-      "image_fit": "Contain",
+      "image_fit": "Fill",
       "style": {
         "spacing": "Small",
         "border_style": "Double"
