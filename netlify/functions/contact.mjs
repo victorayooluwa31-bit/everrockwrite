@@ -1,4 +1,5 @@
 import { getStore } from "@netlify/blobs";
+import { randomUUID } from "node:crypto";
 
 export const handler = async (event) => {
   const reply = (statusCode, data) => ({ statusCode, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" }, body: JSON.stringify(data) });
@@ -15,7 +16,7 @@ export const handler = async (event) => {
   try {
     const store = getStore("everrock-contact-inbox");
     const messages = await store.get("messages", { type: "json" }) || [];
-    messages.push({ id: crypto.randomUUID(), name, email, message, receivedAt: new Date().toISOString() });
+    messages.push({ id: randomUUID(), name, email, message, receivedAt: new Date().toISOString() });
     await store.setJSON("messages", messages.slice(-1000));
     return reply(200, { ok: true });
   } catch (error) {
