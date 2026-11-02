@@ -85,9 +85,13 @@ collections:
                   - { label: Font size, name: text_font_size, widget: string, required: false }
                   - { label: Line height, name: text_line_height, widget: string, required: false }
                   - { label: Text padding above, name: text_padding_top, widget: string, required: false }
+                  - { label: Text padding right, name: text_padding_right, widget: string, required: false }
                   - { label: Text padding below, name: text_padding_bottom, widget: string, required: false }
+                  - { label: Text padding left, name: text_padding_left, widget: string, required: false }
                   - { label: Text margin above, name: text_margin_top, widget: string, required: false }
+                  - { label: Text margin right, name: text_margin_right, widget: string, required: false }
                   - { label: Text margin below, name: text_margin_bottom, widget: string, required: false }
+                  - { label: Text margin left, name: text_margin_left, widget: string, required: false }
                   - { label: Text background, name: text_background, widget: color, allowInput: true, required: false }
                   - { label: Text border color, name: text_border_color, widget: color, allowInput: true, required: false }
                   - { label: Text border thickness (px), name: text_border_width, widget: number, value_type: int, min: 0, max: 20, required: false }
@@ -108,9 +112,13 @@ collections:
                   - { label: Button width, name: button_width, widget: string, required: false }
                   - { label: Button height, name: button_height, widget: string, required: false }
                   - { label: Button padding above, name: button_padding_top, widget: string, required: false }
+                  - { label: Button padding right, name: button_padding_right, widget: string, required: false }
                   - { label: Button padding below, name: button_padding_bottom, widget: string, required: false }
+                  - { label: Button padding left, name: button_padding_left, widget: string, required: false }
                   - { label: Button margin above, name: button_margin_top, widget: string, required: false }
+                  - { label: Button margin right, name: button_margin_right, widget: string, required: false }
                   - { label: Button margin below, name: button_margin_bottom, widget: string, required: false }
+                  - { label: Button margin left, name: button_margin_left, widget: string, required: false }
                   - { label: Button border color, name: button_border_color, widget: color, allowInput: true, required: false }
                   - { label: Button border thickness (px), name: button_border_width, widget: number, value_type: int, min: 0, max: 20, required: false }
                   - { label: Button corner radius, name: button_border_radius, widget: string, required: false }
@@ -129,9 +137,13 @@ collections:
                   - { label: Text alignment, name: align, widget: select, options: ["Left", "Center"], default: "Left", required: false }
                   - { label: Space above and below, name: spacing, widget: select, options: ["None", "Small", "Medium", "Large"], default: "Medium", required: false }
                   - { label: Top padding (CSS size), name: padding_top, widget: string, required: false, hint: "Examples: 24px, 2rem, 5%. Leave empty to use the spacing preset." }
+                  - { label: Right padding (CSS size), name: padding_right, widget: string, required: false }
                   - { label: Bottom padding (CSS size), name: padding_bottom, widget: string, required: false, hint: "Examples: 24px, 2rem, 5%." }
+                  - { label: Left padding (CSS size), name: padding_left, widget: string, required: false }
                   - { label: Top margin (CSS size), name: margin_top, widget: string, required: false, hint: "Examples: 0px, 1rem, 4%." }
+                  - { label: Right margin (CSS size), name: margin_right, widget: string, required: false }
                   - { label: Bottom margin (CSS size), name: margin_bottom, widget: string, required: false, hint: "Examples: 0px, 1rem, 4%." }
+                  - { label: Left margin (CSS size), name: margin_left, widget: string, required: false }
                   - { label: Section border color, name: border_color, widget: color, allowInput: true, required: false }
                   - { label: Section border thickness (px), name: border_width, widget: number, value_type: int, min: 0, max: 20, default: 0, required: false }
                   - { label: Section border style, name: border_style, widget: select, options: ["Solid", "Dashed", "Dotted", "Double"], default: "Solid", required: false }
@@ -152,9 +164,13 @@ collections:
               - { label: Image border thickness (px), name: image_border_width, widget: number, value_type: int, min: 0, max: 20, default: 0, required: false }
               - { label: Image corner radius (CSS size), name: image_border_radius, widget: string, required: false, hint: "Examples: 0px, 8px, 50%." }
               - { label: Image padding above, name: image_padding_top, widget: string, required: false }
+              - { label: Image padding right, name: image_padding_right, widget: string, required: false }
               - { label: Image padding below, name: image_padding_bottom, widget: string, required: false }
+              - { label: Image padding left, name: image_padding_left, widget: string, required: false }
               - { label: Image margin above, name: image_margin_top, widget: string, required: false }
+              - { label: Image margin right, name: image_margin_right, widget: string, required: false }
               - { label: Image margin below, name: image_margin_bottom, widget: string, required: false }
+              - { label: Image margin left, name: image_margin_left, widget: string, required: false }
               - { label: Heading, name: heading, widget: string, required: false }
               - { label: Text, name: body, widget: markdown, required: false }
               - *block_buttons
