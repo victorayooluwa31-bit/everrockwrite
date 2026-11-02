@@ -49,8 +49,10 @@ function mediaStyle(s) {
   const st = s && typeof s === 'object' ? s : {};
   const border = hex(st.image_border_color);
   const width = cssLength(st.image_width), height = cssLength(st.image_height);
-  const paddingTop = cssLength(st.image_padding_top), paddingBottom = cssLength(st.image_padding_bottom);
-  const marginTop = cssLength(st.image_margin_top), marginBottom = cssLength(st.image_margin_bottom);
+  const paddingTop = cssLength(st.image_padding_top), paddingRight = cssLength(st.image_padding_right);
+  const paddingBottom = cssLength(st.image_padding_bottom), paddingLeft = cssLength(st.image_padding_left);
+  const marginTop = cssLength(st.image_margin_top), marginRight = cssLength(st.image_margin_right);
+  const marginBottom = cssLength(st.image_margin_bottom), marginLeft = cssLength(st.image_margin_left);
   const bw = Number(st.image_border_width), radius = cssLength(st.image_border_radius);
   const fit = ['cover', 'contain', 'fill'].includes(str(st.image_fit).toLowerCase()) ? str(st.image_fit).toLowerCase() : '';
   return [
@@ -58,21 +60,26 @@ function mediaStyle(s) {
     fit ? `object-fit:${fit}` : '',
     border && isFinite(bw) && bw > 0 ? `border:${clamp(bw, 0, 20)}px solid ${border}` : '',
     radius ? `border-radius:${radius}` : '',
-    paddingTop ? `padding-top:${paddingTop}` : '', paddingBottom ? `padding-bottom:${paddingBottom}` : '',
-    marginTop ? `margin-top:${marginTop}` : '', marginBottom ? `margin-bottom:${marginBottom}` : '',
+    paddingTop ? `padding-top:${paddingTop}` : '', paddingRight ? `padding-right:${paddingRight}` : '',
+    paddingBottom ? `padding-bottom:${paddingBottom}` : '', paddingLeft ? `padding-left:${paddingLeft}` : '',
+    marginTop ? `margin-top:${marginTop}` : '', marginRight ? `margin-right:${marginRight}` : '',
+    marginBottom ? `margin-bottom:${marginBottom}` : '', marginLeft ? `margin-left:${marginLeft}` : '',
     width || height ? 'max-width:100%' : ''
   ].filter(Boolean).join(';');
 }
 const styleAttr = (value) => value ? ` style="${esc(value)}"` : '';
 function elementStyle(s, prefix = '') {
   const x = s && typeof s === 'object' ? s : {};
-  const pt = cssLength(x[prefix + 'padding_top']), pb = cssLength(x[prefix + 'padding_bottom']);
-  const mt = cssLength(x[prefix + 'margin_top']), mb = cssLength(x[prefix + 'margin_bottom']);
+  const pt = cssLength(x[prefix + 'padding_top']), pr = cssLength(x[prefix + 'padding_right']);
+  const pb = cssLength(x[prefix + 'padding_bottom']), pl = cssLength(x[prefix + 'padding_left']);
+  const mt = cssLength(x[prefix + 'margin_top']), mr = cssLength(x[prefix + 'margin_right']);
+  const mb = cssLength(x[prefix + 'margin_bottom']), ml = cssLength(x[prefix + 'margin_left']);
   const width = cssLength(x[prefix + 'width']), height = cssLength(x[prefix + 'height']);
   const color = hex(x[prefix + 'border_color']), bw = Number(x[prefix + 'border_width']);
   const radius = cssLength(x[prefix + 'border_radius']), bg = hex(x[prefix + 'background']);
   const fontSize = cssLength(x[prefix + 'font_size']), lineHeight = str(x[prefix + 'line_height']);
-  return [pt && `padding-top:${pt}`,pb && `padding-bottom:${pb}`,mt && `margin-top:${mt}`,mb && `margin-bottom:${mb}`,
+  return [pt && `padding-top:${pt}`,pr && `padding-right:${pr}`,pb && `padding-bottom:${pb}`,pl && `padding-left:${pl}`,
+    mt && `margin-top:${mt}`,mr && `margin-right:${mr}`,mb && `margin-bottom:${mb}`,ml && `margin-left:${ml}`,
     width && `width:${width}`,height && `height:${height}`,color && isFinite(bw) && bw > 0 && `border:${clamp(bw,0,20)}px solid ${color}`,
     radius && `border-radius:${radius}`,bg && `background:${bg}`,fontSize && `font-size:${fontSize}`,
     /^(?:\d+(?:\.\d+)?)(?:px|rem|em)?$/.test(lineHeight) && `line-height:${lineHeight}`].filter(Boolean).join(';');
@@ -516,8 +523,10 @@ function shell(s, inner) {
   ov = clamp(ov, 0, 90) / 100;
   const sp = SPACING[str(st.spacing).toLowerCase()] || 'sp-md';
   const center = str(st.align).toLowerCase() === 'center' ? ' center' : '';
-  const pt = cssLength(st.padding_top), pb = cssLength(st.padding_bottom);
-  const mt = cssLength(st.margin_top), mb = cssLength(st.margin_bottom);
+  const pt = cssLength(st.padding_top), pr = cssLength(st.padding_right);
+  const pb = cssLength(st.padding_bottom), pl = cssLength(st.padding_left);
+  const mt = cssLength(st.margin_top), mr = cssLength(st.margin_right);
+  const mb = cssLength(st.margin_bottom), ml = cssLength(st.margin_left);
   const borderColor = hex(st.border_color), borderWidth = Number(st.border_width);
   const borderRadius = cssLength(st.border_radius);
   const borderStyle = ['solid', 'dashed', 'dotted', 'double'].includes(str(st.border_style).toLowerCase()) ? str(st.border_style).toLowerCase() : 'solid';
@@ -525,8 +534,10 @@ function shell(s, inner) {
   // Colours are set as --bg / --ink on the section so everything inside it (buttons, lines, muted text) follows
   const vars = [
     bg ? `background:${bg};--bg:${bg}` : '', fg ? `color:${fg};--ink:${fg}` : '',
-    img ? `--ov:${ov}` : '', pt ? `padding-top:${pt}` : '', pb ? `padding-bottom:${pb}` : '',
-    mt ? `margin-top:${mt}` : '', mb ? `margin-bottom:${mb}` : '',
+    img ? `--ov:${ov}` : '', pt ? `padding-top:${pt}` : '', pr ? `padding-right:${pr}` : '',
+    pb ? `padding-bottom:${pb}` : '', pl ? `padding-left:${pl}` : '',
+    mt ? `margin-top:${mt}` : '', mr ? `margin-right:${mr}` : '',
+    mb ? `margin-bottom:${mb}` : '', ml ? `margin-left:${ml}` : '',
     borderColor && isFinite(borderWidth) && borderWidth > 0 ? `border:${clamp(borderWidth, 0, 20)}px ${borderStyle} ${borderColor}` : '',
     borderRadius ? `border-radius:${borderRadius}` : '', contentWidth ? `--section-content-width:${contentWidth}` : ''
   ].filter(Boolean).join(';');
