@@ -101,6 +101,7 @@ html:not(.js) .has-sub:hover .sub { display: block; }
 .hero-inner { display: grid; gap: 3rem; padding-top: clamp(3rem, 9vw, 6.5rem); padding-bottom: clamp(3rem, 8vw, 5.5rem); }
 @media (min-width: 900px) { .hero-inner.with-doors { grid-template-columns: 1.3fr 1fr; align-items: end; gap: 4.5rem; } }
 .hero h1 { margin: 0; font-weight: 800; font-size: clamp(3.1rem, 9.5vw, 6.6rem); line-height: 0.95; letter-spacing: -0.04em; }
+.hero h1::after { content: ''; display: block; width: 3.25rem; height: 3px; margin-top: 0.7rem; background: #101d34; }
 .hero h1 .w { display: inline-block; animation: rise 0.9s var(--ease) both; animation-delay: calc(var(--i) * 110ms + 150ms); }
 .swoosh { display: block; width: min(330px, 62%); margin-top: 1.1rem; color: color-mix(in srgb, var(--hero-fg) 62%, var(--hero-bg)); overflow: visible; }
 .swoosh path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.3s cubic-bezier(0.5, 0, 0.2, 1) 0.8s forwards; }
