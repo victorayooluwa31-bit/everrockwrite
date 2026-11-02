@@ -265,6 +265,23 @@ figcaption, .cap { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
 .related .post-list, .related .post-row { border-color: color-mix(in srgb, var(--ink) 20%, var(--bg)); }
 
 /* ---------- Footer ---------- */
+/* ---------- Reusable editorial cards ---------- */
+.cards-intro { max-width: 48rem; margin-bottom: 2rem; }
+.cards-intro .prose { margin-top: 0.6rem; }
+.content-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.content-card-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.content-card-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.content-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; color: var(--ink); background: color-mix(in srgb, var(--bg) 92%, var(--ink)); border: 1px solid var(--rule); border-radius: 8px; text-decoration: none; transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease); }
+.content-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 28px rgb(0 0 0 / .08); }
+.content-card-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.content-card-body { display: flex; flex: 1; flex-direction: column; align-items: flex-start; padding: 1.35rem; }
+.content-card-body h3 { margin: 0 0 .55rem; font-size: 1.35rem; line-height: 1.2; }
+.content-card-copy { color: var(--muted); font-size: .97rem; line-height: 1.65; }
+.content-card-copy > :last-child { margin-bottom: 0; }
+.content-card-link { display: inline-flex; gap: .45rem; align-items: center; margin-top: auto; padding-top: 1rem; color: var(--accent); font-weight: 700; font-size: .92rem; }
+@media (max-width: 760px) { .content-card-grid.cols-3, .content-card-grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .content-card-grid, .content-card-grid.cols-2, .content-card-grid.cols-3, .content-card-grid.cols-4 { grid-template-columns: 1fr; } }
+
 .site-footer { background: var(--footer-bg, var(--surface)); color: var(--footer-fg, var(--ink)); border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); }
 .site-footer a { text-decoration-color: transparent; transition: text-decoration-color 0.25s; }
 .site-footer a:hover { text-decoration-color: var(--accent); }
