@@ -26,28 +26,36 @@
           "text": "Biblical teachings, Scripture reflections and thoughtful studies for everyday Christian living.",
           "link": "/word-from-god/",
           "link_text": "Explore Bible studies",
-          "image": "/uploads/an-open-bible-beside-a-notebook-photographed-in-natural-light..png"
+          "image": "/uploads/an-open-bible-beside-a-notebook-photographed-in-natural-light..png",
+          "background": "#101d34",
+          "text_color": "#ffffff"
         },
         {
           "title": "Poetry",
           "text": "Words about faith, love, growth, pain, healing and hope.",
           "link": "/poem/",
           "link_text": "Read the poems",
-          "image": "/uploads/a-notebook-containing-handwritten-poetry-with-a-pen-resting-beside-it..png"
+          "image": "/uploads/a-notebook-containing-handwritten-poetry-with-a-pen-resting-beside-it..png",
+          "background": "#101d34",
+          "text_color": "#ffffff"
         },
         {
           "title": "Life Stories",
           "text": "Personal reflections, relationships, lessons and experiences that shape us.",
           "link": "/personal-reflections/",
           "link_text": "Read life stories",
-          "image": "/uploads/a-quiet-road-a-window-overlooking-a-landscape-or-another-image-suggesting-reflection..png"
+          "image": "/uploads/a-quiet-road-a-window-overlooking-a-landscape-or-another-image-suggesting-reflection..png",
+          "background": "#101d34",
+          "text_color": "#ffffff"
         },
         {
           "title": "Fiction",
           "text": "Original stories filled with imagination, emotion, mystery and meaning.",
           "link": "/short-stories/",
           "link_text": "Explore fiction",
-          "image": "/uploads/an-open-novel-beside-a-reading-lamp-or-an-original-story-illustration..png"
+          "image": "/uploads/an-open-novel-beside-a-reading-lamp-or-an-original-story-illustration..png",
+          "background": "#101d34",
+          "text_color": "#ffffff"
         }
       ],
       "style": {
