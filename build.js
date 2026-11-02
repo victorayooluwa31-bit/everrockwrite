@@ -593,7 +593,7 @@ function renderBlock(s) {
         const title = esc(str(item.title));
         const description = str(item.text);
         const linkText = esc(str(item.link_text) || 'Explore');
-        const inner = `${image ? `<img class="content-card-img" src="${esc(image)}" alt="" loading="lazy">` : ''}<div class="content-card-body"><h3>${title}</h3>${description ? `<p>${marked.parse(description)}</p>` : ''}${href ? `<span class="content-card-link">${linkText} <span aria-hidden="true">→</span></span>` : ''}</div>`;
+        const inner = `${image ? `<img class="content-card-img" src="${esc(image)}" alt="" loading="lazy">` : ''}<div class="content-card-body"><h3>${title}</h3>${description ? `<div class="content-card-copy">${marked.parse(description)}</div>` : ''}${href ? `<span class="content-card-link">${linkText} <span aria-hidden="true">→</span></span>` : ''}</div>`;
         return href ? `<a class="content-card" href="${esc(href)}">${inner}</a>` : `<article class="content-card">${inner}</article>`;
       }).join('');
       return shell(s, `<div class="wrap"><div class="cards-intro">${heading(s)}${prose(s.body)}</div><div class="content-card-grid cols-${columns}">${cards}</div></div>`);
