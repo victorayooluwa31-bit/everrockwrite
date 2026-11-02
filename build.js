@@ -49,18 +49,34 @@ function mediaStyle(s) {
   const st = s && typeof s === 'object' ? s : {};
   const border = hex(st.image_border_color);
   const width = cssLength(st.image_width), height = cssLength(st.image_height);
-  const padding = cssLength(st.image_padding), margin = cssLength(st.image_margin);
+  const paddingTop = cssLength(st.image_padding_top), paddingBottom = cssLength(st.image_padding_bottom);
+  const marginTop = cssLength(st.image_margin_top), marginBottom = cssLength(st.image_margin_bottom);
   const bw = Number(st.image_border_width), radius = cssLength(st.image_border_radius);
   const fit = ['cover', 'contain', 'fill'].includes(str(st.image_fit).toLowerCase()) ? str(st.image_fit).toLowerCase() : '';
   return [
     width ? `width:${width}` : '', height ? `height:${height}` : '',
     fit ? `object-fit:${fit}` : '',
     border && isFinite(bw) && bw > 0 ? `border:${clamp(bw, 0, 20)}px solid ${border}` : '',
-    radius ? `border-radius:${radius}` : '', padding ? `padding:${padding}` : '',
-    margin ? `margin:${margin}` : '', width || height ? 'max-width:100%' : ''
+    radius ? `border-radius:${radius}` : '',
+    paddingTop ? `padding-top:${paddingTop}` : '', paddingBottom ? `padding-bottom:${paddingBottom}` : '',
+    marginTop ? `margin-top:${marginTop}` : '', marginBottom ? `margin-bottom:${marginBottom}` : '',
+    width || height ? 'max-width:100%' : ''
   ].filter(Boolean).join(';');
 }
 const styleAttr = (value) => value ? ` style="${esc(value)}"` : '';
+function elementStyle(s, prefix = '') {
+  const x = s && typeof s === 'object' ? s : {};
+  const pt = cssLength(x[prefix + 'padding_top']), pb = cssLength(x[prefix + 'padding_bottom']);
+  const mt = cssLength(x[prefix + 'margin_top']), mb = cssLength(x[prefix + 'margin_bottom']);
+  const width = cssLength(x[prefix + 'width']), height = cssLength(x[prefix + 'height']);
+  const color = hex(x[prefix + 'border_color']), bw = Number(x[prefix + 'border_width']);
+  const radius = cssLength(x[prefix + 'border_radius']), bg = hex(x[prefix + 'background']);
+  const fontSize = cssLength(x[prefix + 'font_size']), lineHeight = str(x[prefix + 'line_height']);
+  return [pt && `padding-top:${pt}`,pb && `padding-bottom:${pb}`,mt && `margin-top:${mt}`,mb && `margin-bottom:${mb}`,
+    width && `width:${width}`,height && `height:${height}`,color && isFinite(bw) && bw > 0 && `border:${clamp(bw,0,20)}px solid ${color}`,
+    radius && `border-radius:${radius}`,bg && `background:${bg}`,fontSize && `font-size:${fontSize}`,
+    /^(?:\d+(?:\.\d+)?)(?:px|rem|em)?$/.test(lineHeight) && `line-height:${lineHeight}`].filter(Boolean).join(';');
+}
 
 function readJSON(file) {
   const p = path.join(root, file);
@@ -529,7 +545,7 @@ function buttonsHtml(list) {
       const bg = hex(b.bg);
       const fg = hex(b.fg);
       const outline = str(b.style).toLowerCase() === 'outline';
-      const vars = [bg ? `--b-bg:${bg}` : '', fg ? `--b-fg:${fg}` : ''].filter(Boolean).join(';');
+      const vars = [bg ? `--b-bg:${bg}` : '', fg ? `--b-fg:${fg}` : '', elementStyle(b, 'button_')].filter(Boolean).join(';');
       const ext = isExternal(link) || b.new_tab === true;
       return `<a class="btn ${outline ? 'btn-outline' : 'btn-fill'}" href="${esc(link)}"${vars ? ` style="${vars}"` : ''}${ext ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(label)}</a>`;
     })
@@ -581,7 +597,7 @@ function renderBlock(s) {
   switch (t) {
     case 'text': {
       const wide = str(s.width).toLowerCase() === 'wide';
-      return shell(s, `<div class="wrap"><div class="blk-in${wide ? ' wide' : ''} reveal">${heading(s)}${prose(s.body)}${buttonsHtml(s.buttons)}</div></div>`);
+      return shell(s, `<div class="wrap"><div class="blk-in${wide ? ' wide' : ''} reveal"${styleAttr(elementStyle(s, 'text_'))}>${heading(s)}${prose(s.body)}${buttonsHtml(s.buttons)}</div></div>`);
     }
     case 'image_text': {
       const img = safeUrl(s.image);
