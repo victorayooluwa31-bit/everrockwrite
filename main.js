@@ -93,6 +93,20 @@ window.__erReady = true;
     }, 6500);
   }
 
+  /* ---- Editorial card carousel ---- */
+  var carousels = d.querySelectorAll('[data-cards-carousel]');
+  for (var ci = 0; ci < carousels.length; ci++) {
+    (function (wrap) {
+      var track = wrap.querySelector('.content-card-grid');
+      var prev = wrap.querySelector('.carousel-arrow.prev');
+      var next = wrap.querySelector('.carousel-arrow.next');
+      if (!track || !prev || !next) return;
+      var step = function () { var card = track.querySelector('.content-card'); return card ? card.getBoundingClientRect().width + 20 : track.clientWidth * .8; };
+      prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+      next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    })(carousels[ci]);
+  }
+
   /* ---- View counts (GoatCounter) ---- */
   var meta = d.querySelector('meta[name="goatcounter"]');
   var code = meta && meta.getAttribute('content');
