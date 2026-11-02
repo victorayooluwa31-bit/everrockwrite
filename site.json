@@ -63,7 +63,12 @@
         ]
       }
     ],
-    "social_links": [],
+    "social_links": [
+      {
+        "label": "Email Address",
+        "url": "everrockwrite@gmail.com"
+      }
+    ],
     "copyright": "© {{year}} {{author}}. All rights reserved."
   },
   "hero_heading": "Words with purpose."
