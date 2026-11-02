@@ -5,6 +5,7 @@ date: 2026-10-30
 summary: The level of your thinking will either elevate you — or expose you.
 tags:
   - Mind Training
+image: /uploads/motivation-qoute.png
 draft: false
 ---
 I’ve learned this over and over:
