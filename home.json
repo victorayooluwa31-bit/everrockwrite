@@ -90,10 +90,10 @@
         "fg": "#ffffff"
       },
       "image_border_color": "#ffffff",
-      "image_margin_left": "10px",
+      "image_margin_left": "",
       "image_border_width": 4,
       "side": "Right",
-      "image_padding_left": "10px",
+      "image_padding_left": "",
       "type": "image_text",
       "image": "/uploads/victor-ogunleye-2-.jpeg"
     }
