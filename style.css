@@ -165,7 +165,7 @@ html:not(.js) .has-sub:hover .sub { display: block; }
   .split.img-right .split-img { order: 2; }
 }
 .split-img img { width: 100%; border-radius: 4px; display: block; }
-.blk { overflow: hidden; }
+.blk .pic { max-width: var(--section-content-width, var(--wrap)); margin-left: auto; margin-right: auto; }
 .pic { margin: 0; }
 .pic img { width: 100%; border-radius: 4px; }
 .full .pic img { border-radius: 0; }
