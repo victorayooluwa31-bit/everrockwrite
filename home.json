@@ -82,15 +82,15 @@
       "image_margin_right": "0px",
       "style": {
         "spacing": "Small",
-        "border_style": "Dotted",
+        "border_style": null,
         "align": "Left",
-        "border_width": 8,
+        "border_width": "",
         "border_color": "#000000",
         "bg": "#101d34",
         "fg": "#ffffff"
       },
       "image_border_color": "#ffffff",
-      "image_margin_left": "100px",
+      "image_margin_left": "50px",
       "image_border_width": 4,
       "side": "Right",
       "type": "image_text",
