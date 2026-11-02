@@ -51,7 +51,8 @@
         }
       ],
       "style": {
-        "spacing": "Small"
+        "spacing": "Small",
+        "bg": "#101d34"
       }
     },
     {
