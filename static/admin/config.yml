@@ -7,6 +7,7 @@ media_folder: static/uploads
 public_folder: /uploads
 
 collections:
+  # ---------------------------------------------------------------- Posts
   - name: posts
     label: Posts
     label_singular: Post
@@ -14,24 +15,403 @@ collections:
     create: true
     slug: "{{slug}}"
     extension: md
+    summary: "{{title}}"
     editor:
       preview: false
     fields:
       - { label: Title, name: title, widget: string }
+      - label: Category
+        name: category
+        widget: relation
+        collection: categories
+        file: all
+        search_fields: ["categories.*.name"]
+        value_field: "categories.*.name"
+        display_fields: ["categories.*.name"]
+        hint: "Decides which page this post appears on. Add or change categories under Categories."
       - { label: Publish date, name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
-      - { label: Summary, name: summary, widget: text, hint: "One or two sentences shown on the home page." }
+      - { label: Summary, name: summary, widget: text, hint: "One or two sentences shown on the home page and in share previews." }
+      - { label: Tags, name: tags, widget: list, required: false, hint: "Type a tag and press Enter. Posts with shared tags are suggested as related reading." }
       - { label: Cover image, name: image, widget: image, required: false }
       - { label: Draft (hide from site), name: draft, widget: boolean, default: false, required: false }
       - { label: Body, name: body, widget: markdown }
 
+  # ---------------------------------------------------------------- Pages
   - name: pages
     label: Pages
+    label_singular: Page
+    folder: content/pages
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    summary: "{{title}}"
+    editor:
+      preview: false
+    fields:
+      - { label: Page title, name: title, widget: string, hint: "The web address is made from this. A page called Contact Me lives at /contact-me/." }
+      - { label: Show the title at the top of the page, name: show_title, widget: boolean, default: true, required: false, hint: "Turn off for landing pages that start straight with a section." }
+      - label: Where should it appear?
+        name: placement
+        widget: select
+        options: ["Menu", "Footer only", "Hidden"]
+        default: "Menu"
+        required: false
+        hint: "Menu: in the top menu and the footer. Footer only: small link at the bottom. Hidden: not linked anywhere, only reachable by its address. To put a page inside a dropdown, use the Menu section."
+      - { label: Menu order, name: menu_order, widget: number, value_type: int, min: 1, max: 99, default: 50, required: false, hint: "Smaller numbers come first. Pages with the same number are sorted by title." }
+      - { label: Text, name: body, widget: markdown, required: false, hint: "Optional. Plain writing at the top of the page. For anything more, add sections below." }
+      - label: Sections
+        name: sections
+        widget: list
+        required: false
+        label_singular: Section
+        hint: "Build the page from sections. Add as many as you like and drag them into any order. Each section has its own colours, background image and spacing under 'Colors, image and spacing'."
+        types: &block_types
+          - label: Text
+            name: text
+            widget: object
+            summary: "Text: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Text, name: body, widget: markdown, required: false }
+              - { label: Width, name: width, widget: select, options: ["Narrow", "Wide"], default: "Narrow", required: false }
+              - &block_buttons
+                label: Buttons
+                name: buttons
+                widget: list
+                required: false
+                label_singular: Button
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: Button text, name: label, widget: string }
+                  - { label: Link, name: link, widget: string, hint: "A page on this site, like /about/, or a full address like https://example.com" }
+                  - { label: Style, name: style, widget: select, options: ["Filled", "Outline"], default: "Filled", required: false }
+                  - { label: Button color, name: bg, widget: color, allowInput: true, required: false, hint: "Leave empty to use the section's colours." }
+                  - { label: Button text color, name: fg, widget: color, allowInput: true, required: false }
+                  - { label: Open in a new tab, name: new_tab, widget: boolean, default: false, required: false }
+              - &block_style
+                label: Colors, image and spacing
+                name: style
+                widget: object
+                collapsed: true
+                required: false
+                fields:
+                  - { label: Background color, name: bg, widget: color, allowInput: true, required: false }
+                  - { label: Text color, name: fg, widget: color, allowInput: true, required: false, hint: "With a background image, text is white unless you pick a colour here." }
+                  - { label: Background image, name: bg_image, widget: image, required: false }
+                  - { label: Darkness over the background image, name: overlay, widget: number, value_type: int, min: 0, max: 90, step: 5, default: 40, required: false, hint: "Makes text easier to read on photos. 0 = none, 90 = almost black." }
+                  - { label: Text alignment, name: align, widget: select, options: ["Left", "Center"], default: "Left", required: false }
+                  - { label: Space above and below, name: spacing, widget: select, options: ["None", "Small", "Medium", "Large"], default: "Medium", required: false }
+          - label: Image with text
+            name: image_text
+            widget: object
+            summary: "Image with text: {{fields.heading}}"
+            fields:
+              - { label: Image, name: image, widget: image }
+              - { label: Image description (for screen readers), name: alt, widget: string, required: false }
+              - { label: Image position, name: side, widget: select, options: ["Left", "Right"], default: "Left", required: false }
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Text, name: body, widget: markdown, required: false }
+              - *block_buttons
+              - *block_style
+          - label: Image
+            name: image
+            widget: object
+            summary: "Image: {{fields.caption}}"
+            fields:
+              - { label: Image, name: image, widget: image }
+              - { label: Image description (for screen readers), name: alt, widget: string, required: false }
+              - { label: Caption, name: caption, widget: string, required: false }
+              - { label: Size, name: size, widget: select, options: ["Contained", "Full width"], default: "Contained", required: false }
+              - *block_style
+          - label: Call to action (heading and buttons)
+            name: buttons
+            widget: object
+            summary: "Buttons: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Text, name: text, widget: text, required: false }
+              - *block_buttons
+              - *block_style
+          - label: Photo gallery
+            name: gallery
+            widget: object
+            summary: "Gallery: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - label: Photos
+                name: images
+                widget: list
+                label_singular: Photo
+                summary: "{{fields.caption}}"
+                fields:
+                  - { label: Photo, name: image, widget: image }
+                  - { label: Caption, name: caption, widget: string, required: false }
+              - { label: Photos per row, name: columns, widget: select, options: ["2", "3", "4"], default: "3", required: false }
+              - *block_style
+          - label: Cards / category links
+            name: cards
+            widget: object
+            summary: "Cards: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro text, name: body, widget: markdown, required: false }
+              - { label: Cards per row, name: columns, widget: select, options: ["2", "3", "4"], default: "2", required: false }
+              - label: Cards
+                name: cards
+                widget: list
+                label_singular: Card
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Image, name: image, widget: image, required: false }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: text, widget: text, required: false }
+                  - { label: Link, name: link, widget: string, required: false, hint: "Use a page address such as /word-from-god/ or a full external URL." }
+                  - { label: Link text, name: link_text, widget: string, required: false, default: "Explore" }
+              - *block_style
+          - label: Video
+            name: video
+            widget: object
+            summary: "Video: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Video link, name: url, widget: string, hint: "A YouTube or Vimeo address, or a direct .mp4 link." }
+              - { label: Caption, name: caption, widget: string, required: false }
+              - *block_style
+          - label: Big quote
+            name: quote
+            widget: object
+            summary: "Quote: {{fields.text}}"
+            fields:
+              - { label: Quote, name: text, widget: text }
+              - { label: Who said it, name: source, widget: string, required: false, hint: "For example John 3:16, or a name." }
+              - *block_style
+          - label: Latest posts
+            name: latest_posts
+            widget: object
+            summary: "Latest posts: {{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string, default: "Latest writing", required: false }
+              - { label: How many posts, name: count, widget: number, value_type: int, min: 1, max: 30, default: 7, required: false }
+              - label: Only from this category
+                name: category
+                widget: relation
+                collection: categories
+                file: all
+                search_fields: ["categories.*.name"]
+                value_field: "categories.*.name"
+                display_fields: ["categories.*.name"]
+                required: false
+              - *block_style
+          - label: Custom HTML (advanced)
+            name: html
+            widget: object
+            summary: "Custom HTML"
+            fields:
+              - { label: HTML code, name: code, widget: text, hint: "For embeds such as a signup form or a map. Only paste code you trust." }
+              - *block_style
+
+  # ---------------------------------------------------------------- Home page
+  - name: home
+    label: Home page
     editor:
       preview: false
     files:
-      - label: About
-        name: about
-        file: content/pages/about.md
+      - label: Home page
+        name: home
+        file: home.json
+        fields:
+          - { label: Hero heading, name: hero_heading, widget: string, required: false }
+          - { label: Hero text, name: hero_text, widget: text, required: false }
+          - label: Hero background images
+            name: hero_images
+            widget: list
+            required: false
+            hint: "Add one image, or several to fade between them every few seconds. Wide, landscape photos at least 1600 px wide work best. Leave empty for a plain colour."
+            field: { label: Image, name: image, widget: image }
+          - { label: Darkness over images, name: hero_overlay, widget: number, value_type: int, min: 0, max: 90, step: 5, default: 60, required: false, hint: "0 shows the image as it is, 90 is almost black. Around 60 keeps the text easy to read on most photos." }
+          - { label: Hero background color, name: hero_bg_color, widget: color, allowInput: true, required: false, hint: "Used when there are no images, and to tint the images. Leave empty for the logo navy." }
+          - { label: Hero text color, name: hero_text_color, widget: color, allowInput: true, required: false, hint: "Leave empty for white." }
+          - { label: First button text, name: button_1_text, widget: string, required: false, hint: "Leave empty to use 'Read the latest post'." }
+          - { label: First button link, name: button_1_link, widget: string, required: false, hint: "For example /about/ or https://example.com. Leave empty to link to the latest post." }
+          - { label: Second button text, name: button_2_text, widget: string, required: false, hint: "Leave empty to link to your first category." }
+          - { label: Second button link, name: button_2_link, widget: string, required: false }
+          - { label: Show category list beside the heading, name: show_categories, widget: boolean, default: true, required: false }
+          - label: Sections below the hero
+            name: sections
+            widget: list
+            required: false
+            label_singular: Section
+            hint: "Everything under the hero. While this list is empty, your latest posts are shown. As soon as you add a section, only the sections listed here appear, so add a 'Latest posts' section too if you want to keep your newest writing on the home page."
+            types: *block_types
+
+  # ---------------------------------------------------------------- Categories
+  - name: categories
+    label: Categories
+    editor:
+      preview: false
+    files:
+      - label: Categories
+        name: all
+        file: categories.json
+        fields:
+          - label: Categories
+            name: categories
+            widget: list
+            label_singular: Category
+            summary: "{{fields.name}}"
+            hint: "Each category gets its own page and a place in the menu, in this order. Drag to reorder."
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Short description, name: description, widget: text, required: false, hint: "Shown under the category title." }
+              - { label: Web address ending, name: slug, widget: string, required: false, hint: "Optional. Leave empty and it is made from the name. Changing it later breaks links people have saved." }
+
+  # ---------------------------------------------------------------- Menu
+  - name: menu
+    label: Menu (dropdowns)
+    editor:
+      preview: false
+    files:
+      - label: Dropdown menus
+        name: menu
+        file: menu.json
+        fields:
+          - label: Dropdown menus
+            name: dropdowns
+            widget: list
+            required: false
+            label_singular: Dropdown menu
+            summary: "{{fields.label}}"
+            hint: "The top menu lists your categories and pages automatically. Create a dropdown here and put items inside it: they move out of the main row into the dropdown, and the dropdown takes the place of the first item you moved."
+            fields:
+              - { label: Menu name, name: label, widget: string, hint: "The word shown in the top menu, for example More or Writing." }
+              - label: Items inside the dropdown
+                name: items
+                widget: list
+                label_singular: Item
+                hint: "Drag to reorder."
+                types:
+                  - label: A page
+                    name: page
+                    widget: object
+                    summary: "Page: {{fields.page}}"
+                    fields:
+                      - label: Page
+                        name: page
+                        widget: relation
+                        collection: pages
+                        search_fields: ["title"]
+                        value_field: "title"
+                        display_fields: ["title"]
+                      - { label: Different menu text, name: label, widget: string, required: false }
+                  - label: A category
+                    name: category
+                    widget: object
+                    summary: "Category: {{fields.category}}"
+                    fields:
+                      - label: Category
+                        name: category
+                        widget: relation
+                        collection: categories
+                        file: all
+                        search_fields: ["categories.*.name"]
+                        value_field: "categories.*.name"
+                        display_fields: ["categories.*.name"]
+                      - { label: Different menu text, name: label, widget: string, required: false }
+                  - label: A link to another address
+                    name: link
+                    widget: object
+                    summary: "Link: {{fields.label}}"
+                    fields:
+                      - { label: Menu text, name: label, widget: string }
+                      - { label: Address, name: url, widget: string, hint: "For example /contact-me/ or https://example.com" }
+
+  # ---------------------------------------------------------------- Privacy and copyright
+  - name: legal
+    label: Privacy and copyright
+    editor:
+      preview: false
+    files:
+      - label: Privacy Policy
+        name: privacy
+        file: privacy.md
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Body, name: body, widget: markdown }
+      - label: Copyright and Ownership
+        name: copyright
+        file: copyright.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Body, name: body, widget: markdown }
+
+  # ---------------------------------------------------------------- Site settings
+  - name: settings
+    label: Site settings
+    editor:
+      preview: false
+    files:
+      - label: Site settings
+        name: site
+        file: site.json
+        fields:
+          - { label: Site name, name: title, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Owner name (shown in the footer), name: author, widget: string }
+          - { label: Website address, name: url, widget: string, hint: "For example https://everrockwrite.netlify.app (no slash at the end). Needed for share previews and the sitemap." }
+          - label: Site colors
+            name: colors
+            widget: object
+            collapsed: true
+            required: false
+            hint: "Leave any colour empty to keep the current look. These apply to the whole site. The hero and each section can override them."
+            fields:
+              - { label: Text color, name: text, widget: color, allowInput: true, required: false }
+              - { label: Page background, name: background, widget: color, allowInput: true, required: false }
+              - { label: Accent color (links and underlines), name: accent, widget: color, allowInput: true, required: false }
+              - { label: Header background, name: header_bg, widget: color, allowInput: true, required: false }
+              - { label: Header text (menu), name: header_text, widget: color, allowInput: true, required: false }
+              - { label: Footer background, name: footer_bg, widget: color, allowInput: true, required: false }
+              - { label: Footer text, name: footer_text, widget: color, allowInput: true, required: false }
+              - { label: Button color, name: button, widget: color, allowInput: true, required: false }
+              - { label: Button text color, name: button_text, widget: color, allowInput: true, required: false }
+          - { label: Main logo, name: logo, widget: image, required: false, hint: "Shown in the footer and in share previews. Leave empty to keep the current logo. A square PNG with a transparent or white background works best." }
+          - { label: Header logo, name: header_logo, widget: image, required: false, hint: "A wide version of your logo for the top of the site. Leave empty to use the main logo." }
+          - { label: Favicon, name: favicon, widget: image, required: false, hint: "The small icon in the browser tab. Upload a square PNG, about 512 x 512 px. Leave empty to keep the current one." }
+          - label: Footer content and layout
+            name: footer
+            widget: object
+            collapsed: false
+            required: false
+            hint: "Edit the footer shown at the bottom of every page. Add columns and links, then drag them into the order you want."
+            fields:
+              - { label: Footer description, name: description, widget: text, required: false }
+              - { label: Show logo, name: show_logo, widget: boolean, default: true, required: false }
+              - label: Link columns
+                name: columns
+                widget: list
+                required: false
+                label_singular: Footer column
+                summary: "{{fields.heading}}"
+                fields:
+                  - { label: Column heading, name: heading, widget: string }
+                  - label: Links
+                    name: links
+                    widget: list
+                    required: false
+                    label_singular: Link
+                    summary: "{{fields.label}}"
+                    fields:
+                      - { label: Link text, name: label, widget: string }
+                      - { label: Address, name: url, widget: string, hint: "Use an internal path such as /about/ or a full URL." }
+                      - { label: Open in new tab, name: new_tab, widget: boolean, default: false, required: false }
+              - label: Social links
+                name: social_links
+                widget: list
+                required: false
+                label_singular: Social link
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: Platform / label, name: label, widget: string }
+                  - { label: Profile URL, name: url, widget: string }
+              - { label: Copyright line, name: copyright, widget: string, required: false, default: "© {{year}} {{author}}. All rights reserved.", hint: "You can use {{year}} and {{author}} as automatic placeholders." }
+          - { label: GoatCounter code, name: goatcounter, widget: string, required: false, hint: "The part before .goatcounter.com. Leave empty to hide view counts." }
