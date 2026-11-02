@@ -19,7 +19,7 @@
       "type": "cards",
       "heading": "Explore EverRock Write",
       "body": "Four spaces for faith, expression, experience and imagination.",
-      "columns": "2",
+      "columns": "4",
       "cards": [
         {
           "title": "Word from God",
@@ -48,7 +48,7 @@
         }
       ],
       "style": {
-        "spacing": "Large"
+        "spacing": "Small"
       }
     },
     {
@@ -56,25 +56,25 @@
       "title": "Latest writing",
       "count": 4,
       "style": {
-        "spacing": "Large"
+        "spacing": "Small"
       }
     },
     {
       "type": "image_text",
       "side": "Right",
       "image": "/uploads/victor-ogunleye-2-.jpeg",
-      "heading": "A note from the writer",
+      "heading": "A Note From The Writer",
       "body": "Every piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing and fiction.\n\nThis is a space for exploring ideas, expressing experiences and telling stories with purpose.",
       "alt": "Victor Ogunleye, writer and founder of EverRock Write",
       "buttons": [
         {
           "label": "Meet the writer",
           "link": "/about-the-writer/",
-          "style": "Filled"
+          "style": "Outline"
         }
       ],
       "style": {
-        "spacing": "Large"
+        "spacing": "Small"
       }
     }
   ],
