@@ -239,6 +239,16 @@ collections:
                   - { label: Description, name: text, widget: text, required: false }
                   - { label: Link, name: link, widget: string, required: false, hint: "Use a page address such as /word-from-god/ or a full external URL." }
                   - { label: Link text, name: link_text, widget: string, required: false, default: "Explore" }
+                  - { label: Card background color, name: background, widget: color, allowInput: true, required: false }
+                  - { label: Card text color, name: text_color, widget: color, allowInput: true, required: false }
+                  - { label: Card padding top, name: card_padding_top, widget: string, required: false, hint: "Examples: 20px, 1rem, 5%." }
+                  - { label: Card padding right, name: card_padding_right, widget: string, required: false }
+                  - { label: Card padding bottom, name: card_padding_bottom, widget: string, required: false }
+                  - { label: Card padding left, name: card_padding_left, widget: string, required: false }
+                  - { label: Card margin top, name: card_margin_top, widget: string, required: false }
+                  - { label: Card margin right, name: card_margin_right, widget: string, required: false }
+                  - { label: Card margin bottom, name: card_margin_bottom, widget: string, required: false }
+                  - { label: Card margin left, name: card_margin_left, widget: string, required: false }
               - *block_style
           - label: Video
             name: video
