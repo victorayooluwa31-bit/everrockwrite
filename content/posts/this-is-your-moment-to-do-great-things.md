@@ -7,7 +7,8 @@ summary: Greatness does not announce itself with a drumroll. It does not send an
   the small, consistent steps you take toward your goals.
 tags:
   - MindTraining
-draft: true
+image: /uploads/your-moment-for-great-things.png
+draft: false
 ---
 There comes a time in life when you must stand at the crossroads of hesitation and action. You have spent days, months, perhaps even years waiting for the “***perfect***” moment. But what if I told you that the perfect moment does not exist? What if I told you that this—this very moment—is all you need?
 
