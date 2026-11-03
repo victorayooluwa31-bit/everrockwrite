@@ -18,7 +18,7 @@ It was in silence that I wrote my **best content**. It was in silence that I ref
 
 Silence became my teacher. It gave me new motivational quotes, new knowledge, new creativity. It showed me how to solve my problems. It even revealed my purpose.
 
-> The Bible says in Psalm 46:10***, “Be still, and know that I am God.”*** And in Isaiah 30:15, “***In quietness and in trust shall be your strength.***”
+> The Bible says in Psalm 46:10***, “***Be still, and know that I am God.***”*** And in Isaiah 30:15, “***In quietness and in trust shall be your strength.***”
 
 Even Jesus Himself withdrew to lonely places at night to pray and find strength (Mark 1:35).
 
