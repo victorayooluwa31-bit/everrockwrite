@@ -4,7 +4,7 @@ category: Lessons from Life
 date: 2026-10-30
 summary: The level of your thinking will either elevate you — or expose you.
 tags:
-  - Mind Training
+  - MindTraining
 image: /uploads/daily-motivation-qoute.png
 draft: false
 ---
