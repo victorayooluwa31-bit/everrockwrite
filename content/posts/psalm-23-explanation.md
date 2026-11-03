@@ -1,5 +1,5 @@
 ---
-title: Psalm 23 explanation
+title: Psalm 23 Explanation
 category: Bible Studies
 date: 2026-11-01
 summary: God’s blessings are ours. But we must obey Him, follow His ways, and
