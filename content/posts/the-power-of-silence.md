@@ -32,7 +32,7 @@ It is the place where God speaks, where your mind breathes, where your soul heal
 2. **Reflective Silence** – the kind that makes you look back, not to regret, but to learn. In silence, I analyzed my mistakes, saw where I fell, and chose how not to fall again.
 3. **Grateful Silence** – the kind where you count your blessings. It was in the quiet that I realized how much I already had, and how much I still could become.
 4. **Healing Silence** – the kind that calms your heart. In silence, stress leaves, peace enters, and hope is reborn.
-5.  **Spiritual Silence** – the kind that connects you to God. In stillness, you hear Him better. In quietness, you discover that you are not alone.
+5. **Spiritual Silence** – the kind that connects you to God. In stillness, you hear Him better. In quietness, you discover that you are not alone.
 
 ## Why Silence Matters
 
