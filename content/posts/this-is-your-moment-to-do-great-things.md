@@ -1,6 +1,6 @@
 ---
 title: This Is Your Moment to Do Great Things.
-category: Life & Growth
+category: Life Experiences
 date: 2026-11-03
 summary: Greatness does not announce itself with a drumroll. It does not send an
   invitation or wait for your convenience. It appears in the quiet decisions, in
