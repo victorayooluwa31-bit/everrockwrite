@@ -19,7 +19,7 @@
       "type": "cards",
       "heading": "Explore EverRock Write",
       "body": "Four spaces for faith, expression, experience and imagination.",
-      "columns": "2",
+      "columns": "4",
       "cards": [
         {
           "title": "Word from God",
@@ -65,8 +65,35 @@
     },
     {
       "type": "carousel",
-      "cards": [],
-      "columns": "3"
+      "cards": [
+        {
+          "link_text": "",
+          "background": "#0b1b35",
+          "text_color": "#ffffff",
+          "title": "Daily Verse",
+          "text": "\"The labour of the foolish wearieth every one of them, because he knoweth not how to go to the city.\" Ecclesiastes 10:15 (KJV)"
+        },
+        {
+          "link_text": "",
+          "background": "#0b1b35",
+          "title": "Daily Gospel",
+          "text": "\"And they departed quickly from the sepulcher with fear and great joy; and did run to bring his disciples word.\" Matthew 28:8 (KJV)",
+          "text_color": "#ffffff"
+        },
+        {
+          "link_text": "",
+          "title": "Daily Psalm",
+          "background": "#0b1b35",
+          "text_color": "#ffffff",
+          "text": "\"The Lord gave the word: great was the company of those that published it.\" Psalm 68:11 (KJV)"
+        }
+      ],
+      "columns": "3",
+      "heading": "Daily Inspiration",
+      "style": {
+        "bg": "#ffffff",
+        "fg": "#0b1b35"
+      }
     },
     {
       "type": "latest_posts",
