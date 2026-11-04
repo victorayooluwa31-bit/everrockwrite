@@ -493,14 +493,14 @@ function featured(p) {
 function related(post) {
   return posts
     .filter((p) => p.slug !== post.slug)
-    .map((p) => {
-      const shared = p.tags.filter((t) => post.tags.some((x) => x.slug === t.slug)).length;
-      const sameCat = p.category && post.category && p.category.slug === post.category.slug ? 1 : 0;
-      return { p, score: shared * 3 + sameCat * 2 };
-    })
-    .sort((a, b) => b.score - a.score || b.p.date - a.p.date)
+    .map((p) => ({
+      p,
+      shared: p.tags.filter((t) => post.tags.some((x) => x.slug === t.slug)).length,
+    }))
+    .filter((item) => item.shared > 0)
+    .sort((a, b) => b.shared - a.shared || b.p.date - a.p.date)
     .slice(0, 3)
-    .map((s) => s.p);
+    .map((item) => item.p);
 }
 
 const pageHead = (title, sub) => `<header class="page-head wrap">
@@ -601,6 +601,31 @@ function latestBlock(s) {
   return inner + '</div>';
 }
 
+function cardsBlock(s, carousel) {
+  const items = (Array.isArray(s.cards) ? s.cards : []).filter((item) => str(item && item.title));
+  const title = heading(s);
+  const intro = prose(s.body);
+  if (!items.length && !title && !intro) return '';
+  const columns = [2, 3, 4].includes(parseInt(s.columns, 10)) ? parseInt(s.columns, 10) : 2;
+  const cards = items.map((item) => {
+    const href = safeUrl(item.link);
+    const image = safeUrl(item.image);
+    const cardTitle = esc(str(item.title));
+    const description = str(item.text);
+    const linkText = esc(str(item.link_text) || 'Explore');
+    const cardBg = hex(item.background);
+    const cardFg = hex(item.text_color);
+    const cardStyle = [cardBg ? `--card-bg:${cardBg}` : '', cardFg ? `--card-fg:${cardFg}` : '', elementStyle(item, 'card_')].filter(Boolean).join(';');
+    const inner = `${image ? `<img class="content-card-img" src="${esc(image)}" alt="" loading="lazy">` : ''}<div class="content-card-body"><h3>${cardTitle}</h3>${description ? `<div class="content-card-copy">${marked.parse(description)}</div>` : ''}${href ? `<span class="content-card-link">${linkText} <span aria-hidden="true">→</span></span>` : ''}</div>`;
+    return href ? `<a class="content-card" href="${esc(href)}"${styleAttr(cardStyle)}>${inner}</a>` : `<article class="content-card"${styleAttr(cardStyle)}>${inner}</article>`;
+  }).join('');
+  const grid = `<div class="content-card-grid cols-${columns}${carousel ? ' is-carousel' : ''}">${cards}</div>`;
+  const content = carousel && items.length
+    ? `<div class="cards-carousel" data-cards-carousel><button class="carousel-arrow prev" type="button" aria-label="Previous cards">‹</button>${grid}<button class="carousel-arrow next" type="button" aria-label="Next cards">›</button></div>`
+    : grid;
+  return shell(s, `<div class="wrap"><div class="cards-intro">${title}${intro}</div>${content}</div>`);
+}
+
 function renderBlock(s) {
   if (!s || typeof s !== 'object') return '';
   const t = str(s.type);
@@ -641,25 +666,10 @@ function renderBlock(s) {
           .join('')}</ul></div>`
       );
     }
-    case 'cards': {
-      const items = (Array.isArray(s.cards) ? s.cards : []).filter((item) => str(item && item.title));
-      const columns = [2, 3, 4].includes(parseInt(s.columns, 10)) ? parseInt(s.columns, 10) : 2;
-      const cards = items.map((item) => {
-        const href = safeUrl(item.link);
-        const image = safeUrl(item.image);
-        const title = esc(str(item.title));
-        const description = str(item.text);
-        const linkText = esc(str(item.link_text) || 'Explore');
-        const cardBg = hex(item.background);
-        const cardFg = hex(item.text_color);
-        const cardStyle = [cardBg ? `--card-bg:${cardBg}` : '', cardFg ? `--card-fg:${cardFg}` : '', elementStyle(item, 'card_')].filter(Boolean).join(';');
-        const inner = `${image ? `<img class="content-card-img" src="${esc(image)}" alt="" loading="lazy">` : ''}<div class="content-card-body"><h3>${title}</h3>${description ? `<div class="content-card-copy">${marked.parse(description)}</div>` : ''}${href ? `<span class="content-card-link">${linkText} <span aria-hidden="true">→</span></span>` : ''}</div>`;
-        return href ? `<a class="content-card" href="${esc(href)}"${styleAttr(cardStyle)}>${inner}</a>` : `<article class="content-card"${styleAttr(cardStyle)}>${inner}</article>`;
-      }).join('');
-      const carousel = s.carousel === true || String(s.carousel).toLowerCase() === "true";
-      const grid = `<div class="content-card-grid cols-${columns}${carousel ? " is-carousel" : ""}"${carousel ? ` id="cards-${Math.random().toString(36).slice(2, 8)}"` : ""}>${cards}</div>`;
-      return shell(s, `<div class="wrap"><div class="cards-intro">${heading(s)}${prose(s.body)}</div>${carousel ? `<div class="cards-carousel" data-cards-carousel><button class="carousel-arrow prev" type="button" aria-label="Previous cards">‹</button>${grid}<button class="carousel-arrow next" type="button" aria-label="Next cards">›</button></div>` : grid}</div>`);
-    }
+    case 'cards':
+      return cardsBlock(s, false);
+    case 'carousel':
+      return cardsBlock(s, true);
     case 'video': {
       const v = videoEmbed(s.url);
       if (!v) { console.warn(`Warning: video link "${str(s.url)}" is not a YouTube, Vimeo or .mp4 address, skipped.`); return ''; }
@@ -828,7 +838,7 @@ for (const p of posts) {
     ${p.tags.length ? `<ul class="tags reveal" aria-label="Tags">${p.tags.map((t) => `<li><a href="/tags/${t.slug}/">#${esc(t.name)}</a></li>`).join('')}</ul>` : ''}
     <div class="share reveal"><span>Share this post</span>${shareLinks}<button type="button" data-copy>Copy link</button></div>
   </div>
-  ${rel.length ? `<section class="related"><div class="wrap"><h2 class="section-title reveal">Keep reading</h2>${postList(rel)}</div></section>` : ''}
+  ${rel.length ? `<section class="related"><div class="wrap"><h2 class="section-title reveal">Keep reading</h2>${postList(rel)}${p.tags.length ? `<div class="tag-discovery">${p.tags.map((t) => `<a class="btn btn-fill" href="/tags/${t.slug}/">Discover More</a>`).join('')}</div>` : ''}</div></section>` : ''}
 </article>`;
   write(`posts/${p.slug}/index.html`, layout({
     title: p.title,
