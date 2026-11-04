@@ -68,31 +68,31 @@
       "cards": [
         {
           "link_text": "",
-          "background": "#0b1b35",
-          "text_color": "#ffffff",
+          "background": "#ffff",
+          "text_color": "#0b1b35",
           "title": "Daily Verse",
           "text": "\"The labour of the foolish wearieth every one of them, because he knoweth not how to go to the city.\" Ecclesiastes 10:15 (KJV)"
         },
         {
           "link_text": "",
-          "background": "#0b1b35",
+          "background": "#fff",
           "title": "Daily Gospel",
           "text": "\"And they departed quickly from the sepulcher with fear and great joy; and did run to bring his disciples word.\" Matthew 28:8 (KJV)",
-          "text_color": "#ffffff"
+          "text_color": "#0b1b35"
         },
         {
           "link_text": "",
           "title": "Daily Psalm",
-          "background": "#0b1b35",
-          "text_color": "#ffffff",
+          "background": "#ffff",
+          "text_color": "#0b1b35",
           "text": "\"The Lord gave the word: great was the company of those that published it.\" Psalm 68:11 (KJV)"
         }
       ],
       "columns": "3",
       "heading": "Daily Inspiration",
       "style": {
-        "bg": "#ffffff",
-        "fg": "#0b1b35"
+        "bg": "#0b1b35",
+        "fg": "#ffffff"
       }
     },
     {
