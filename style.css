@@ -239,8 +239,9 @@ figcaption, .cap { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
 .article-head { padding-top: clamp(2.5rem, 7vw, 4.5rem); }
 .article-head h1 { font-weight: 800; font-size: clamp(2.3rem, 6vw, 3.8rem); line-height: 1.03; letter-spacing: -0.035em; margin: 0.9rem 0 1rem; }
 .standfirst { font-size: 1.3rem; line-height: 1.55; color: var(--muted); margin: 0 0 2rem; }
-.hero-img { max-width: 62rem; margin: 0.5rem auto 2.5rem; padding: 0 1.25rem; }
-.hero-img img { width: 100%; max-height: 540px; object-fit: cover; border-radius: 4px; }
+.hero-img { width: 100%; max-width: var(--read); margin: 0.5rem auto 2.5rem; padding: 0 1.25rem; }
+.hero-img img { width: 100%; height: auto; max-height: none; object-fit: contain; border-radius: 4px; }
+.prose img { width: auto; max-width: 100%; height: auto; object-fit: contain; }
 .prose { margin-top: 1.5rem; }
 .prose h2, .prose h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin: 2.6rem 0 0.8rem; }
 .prose h2 { font-size: 1.85rem; }
@@ -328,3 +329,5 @@ figcaption, .cap { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
 .cards-carousel .carousel-arrow:hover{border-color:var(--accent);background:var(--surface)}
 @media(max-width:520px){.cards-carousel{grid-template-columns:minmax(0,1fr)}.cards-carousel .carousel-arrow{position:absolute;z-index:2;top:42%;background:var(--bg);box-shadow:0 2px 12px rgb(0 0 0 / .15)}.cards-carousel .carousel-arrow.prev{left:.35rem}.cards-carousel .carousel-arrow.next{right:.35rem}}
 @media(prefers-reduced-motion:reduce){.cards-carousel .content-card-grid.is-carousel{scroll-behavior:auto}}
+
+.tag-discovery { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.5rem; }
