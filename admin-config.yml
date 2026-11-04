@@ -31,7 +31,7 @@ collections:
         hint: "Decides which page this post appears on. Add or change categories under Categories."
       - { label: Publish date, name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
       - { label: Summary, name: summary, widget: text, hint: "One or two sentences shown on the home page and in share previews." }
-      - { label: Tags, name: tags, widget: list, required: false, hint: "Type a tag and press Enter. Posts with shared tags are suggested as related reading." }
+      - { label: Tags, name: tags, widget: list, required: false, hint: "Add more than one tag: type a tag and press Enter, then add another. Posts sharing any tag can appear as related reading." }
       - { label: Cover image, name: image, widget: image, required: false }
       - { label: Draft (hide from site), name: draft, widget: boolean, default: false, required: false }
       - { label: Body, name: body, widget: markdown }
@@ -228,7 +228,6 @@ collections:
               - { label: Heading, name: heading, widget: string, required: false }
               - { label: Intro text, name: body, widget: markdown, required: false }
               - { label: Cards per row, name: columns, widget: select, options: ["2", "3", "4"], default: "2", required: false }
-              - { label: Display as a horizontal carousel, name: carousel, widget: boolean, default: false, required: false, hint: "Readers can scroll through the cards using arrow controls." }
               - label: Cards
                 name: cards
                 widget: list
@@ -250,6 +249,29 @@ collections:
                   - { label: Card margin right, name: card_margin_right, widget: string, required: false }
                   - { label: Card margin bottom, name: card_margin_bottom, widget: string, required: false }
                   - { label: Card margin left, name: card_margin_left, widget: string, required: false }
+              - *block_style
+          - label: Carousel
+            name: carousel
+            widget: object
+            summary: "Carousel: {{fields.heading}}"
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro text, name: body, widget: markdown, required: false }
+              - { label: Cards visible per step, name: columns, widget: select, options: ["2", "3", "4"], default: "3", required: false }
+              - label: Carousel items
+                name: cards
+                widget: list
+                required: false
+                label_singular: Carousel item
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Image, name: image, widget: image, required: false }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: text, widget: text, required: false }
+                  - { label: Link, name: link, widget: string, required: false }
+                  - { label: Link text, name: link_text, widget: string, required: false, default: "Explore" }
+                  - { label: Card background color, name: background, widget: color, allowInput: true, required: false }
+                  - { label: Card text color, name: text_color, widget: color, allowInput: true, required: false }
               - *block_style
           - label: Video
             name: video
