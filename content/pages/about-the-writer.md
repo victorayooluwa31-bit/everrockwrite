@@ -7,7 +7,7 @@ sections: []
 ---
 My name is **VICTOR OGUNLEYE**. I come from a humble family of seven. I am the first son and the eldest male child, although I have an older sister. Growing up, I often wondered how people could live in a world free from problems, but I never found an answer. What I did discover, however, was my passion and talent for writing.
 
-I discovered my talent for writing when I joined an organisation at the age of 20. Before then, I had always been passionate about preaching and sharing encouraging words with people, a passion I developed when I was about 17 or even earlier. I had even written a storybook, but because of my lack of self-confidence, I could not bring myself to show it to anyone.
+I discovered my talent for writing when I joined an organization at the age of 20. Before then, I had always been passionate about preaching and sharing encouraging words with people, a passion I developed when I was about 17 or even earlier. I had even written a storybook, but because of my lack of self-confidence, I could not bring myself to show it to anyone.
 
 My journey into writing was not an easy one. One of my biggest challenges was the absence of someone to guide or mentor me. I had to learn on my own by reading other people's articles and posts online and picking up whatever knowledge I could. I was also a shy person who struggled with confidence. I often felt that people would not appreciate my writing, so I underestimated myself and kept many of my thoughts and lessons to myself. Despite that, I constantly found myself discovering new topics to write about, particularly those centered on motivation, inspiration, and life lessons.
 
@@ -32,30 +32,3 @@ This is not my first attempt at building a platform. In 2025, I also created a w
 I believe there is still so much I can do with the gift of writing, and I am determined to keep growing, learning, and sharing my words with the world.
 
 > **I will not give up until I achieve my goal and the world sees the light in my words.**
-
-## LESSONS FROM MY JOURNEY
-
-Looking back at my journey, I have come to understand a few things that I believe are worth sharing.
-
-1. **Never allow people's reactions to determine the value of your work.** The number of likes, comments, or shares your writing receives does not always reflect its worth. Sometimes, the message that means so much to you may reach only a few people at first. Keep learning and improving.
-2. **Lack of support does not mean you should abandon your dream.** There may be times when the people you expect to understand you do not. That can be painful, but it does not automatically mean your dream is wrong or impossible.
-3. **Failure and disappointment are not the end of the journey.** Losing my Facebook page and experiencing setbacks with my websites were painful experiences. However, they taught me that I must be willing to start again, even when starting over feels difficult.
-4. **Do not allow fear to keep your gifts hidden.** I once had a storybook that I could not show anyone because I lacked confidence. I now understand that a gift cannot grow fully if fear keeps it locked away. You have to be willing to learn, practise, and share what you can.
-5. **A little encouragement can make a difference.** Sometimes, one person believing in you can help you find the courage to believe in yourself again. I experienced this when someone read my writing and encouraged me to continue.
-6. **Consistency is more than receiving attention.** Writing is a process of learning and improving. Even when nobody seems to be paying attention, you can still be developing your ability and preparing for opportunities ahead.
-
-## A WORD OF ENCOURAGEMENT
-
-To anyone reading this who feels discouraged, overlooked, misunderstood, or afraid to pursue a dream, I want you to know that your present situation does not have to define your future.
-
-You may have tried several times and failed. You may have shared your ideas and received little or no encouragement. Perhaps people have misunderstood your intentions, or you have lost something you worked hard to build. I understand that these experiences can make you question yourself and wonder whether continuing is worth it.
-
-But do not allow one painful experience to become the reason you give up on everything you hope to achieve.
-
-Take your time to learn. Correct your mistakes. Build your confidence gradually, and do not be ashamed to start again. You do not have to have everything figured out before taking the next step. What matters is that you keep growing and do not allow fear to silence you.
-
-Most importantly, never measure your entire journey by what is happening today. Your progress may be slow, and the support you need may not come from the people you expected. Keep doing what is right, remain open to learning, and trust God as you move forward.
-
-I am still learning, and I am still on my journey. I have not achieved everything I dream of yet, but I have decided that my setbacks will not have the final say.
-
-> **If you still have a dream worth pursuing, do not give up on yourself. Your story is still being written.**
