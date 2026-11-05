@@ -441,6 +441,7 @@ ${gc ? `<meta name="goatcounter" content="${gc}">\n<script data-goatcounter="htt
     <nav class="nav" id="site-nav" aria-label="Main">
       ${navHtml(current)}
     </nav>
+    <a class="header-search" href="/search/" aria-label="Search EverRock Write">Search</a>
   </div>
 </header>
 <main id="main">
@@ -457,6 +458,25 @@ ${body}
   </div>
   <div class="wrap fine">${esc(footerCopyright)}</div>
 </footer>
+<div class="newsletter-modal" id="newsletter-modal" aria-hidden="true">
+  <div class="newsletter-backdrop" data-newsletter-close></div>
+  <section class="newsletter-dialog" role="dialog" aria-modal="true" aria-labelledby="newsletter-title" aria-describedby="newsletter-description">
+    <button class="newsletter-close" type="button" aria-label="Close newsletter signup" data-newsletter-close>&times;</button>
+    <p class="newsletter-eyebrow">EverRock Write Newsletter</p>
+    <h2 id="newsletter-title">Words worth reading, delivered to your inbox.</h2>
+    <p id="newsletter-description">Subscribe to receive new stories, poetry and reflections from EverRock Write.</p>
+    <form action="https://app.us7.list-manage.com/subscribe/post?u=503f177ec1d7f6d92466ab272&amp;id=344c631144&amp;f_id=00ccc1e1f0" method="post" target="_blank" class="newsletter-form" id="newsletter-form">
+      <label for="newsletter-email">Email address <span aria-hidden="true">*</span></label>
+      <input type="email" name="EMAIL" id="newsletter-email" required autocomplete="email" placeholder="you@example.com">
+      <label for="newsletter-name">First name</label>
+      <input type="text" name="FNAME" id="newsletter-name" autocomplete="given-name" placeholder="Your name">
+      <input type="hidden" name="tags" value="45734">
+      <div class="newsletter-honeypot" aria-hidden="true"><label for="newsletter-website">Leave this field empty</label><input type="text" name="b_503f177ec1d7f6d92466ab272_344c631144" id="newsletter-website" tabindex="-1" value=""></div>
+      <button type="submit">Subscribe</button>
+      <p class="newsletter-privacy">You can unsubscribe at any time.</p>
+    </form>
+  </section>
+</div>
 </body>
 </html>`;
 }
@@ -829,6 +849,7 @@ for (const p of posts) {
     <header class="article-head">
       <div class="meta reveal">${catLink(p)}<time datetime="${isoDate(p.date)}">${fmtDate(p.date)}</time><span>${p.minutes} min read</span>${viewsEl(p.url)}</div>
       <h1 class="reveal">${esc(p.title)}</h1>
+      <p class="article-byline">Written by <a href="/about-the-writer/">Victor Ogunleye</a> · EverRock Write</p>
       ${p.summary ? `<p class="standfirst reveal">${esc(p.summary)}</p>` : ''}
     </header>
   </div>
@@ -870,6 +891,23 @@ write('404.html', layout({
   title: 'Page not found',
   noindex: true,
   body: `<div class="wrap"><div class="article"><header class="article-head"><h1>Page not found</h1><p class="standfirst">That link does not lead anywhere. <a href="/">Go to the home page</a>.</p></header></div></div>`,
+}));
+
+/* Search page and searchable post index */
+const searchIndex = posts.map((p) => ({
+  title: p.title,
+  summary: p.summary || '',
+  url: p.url,
+  category: p.category ? p.category.name : '',
+  date: isoDate(p.date),
+  text: p.content.replace(/<[^>]*>/g, ' ').replace(/[#*_>`]/g, ' ').replace(/\s+/g, ' ').slice(0, 5000)
+}));
+write('search-index.json', JSON.stringify(searchIndex));
+write('search/index.html', layout({
+  title: 'Search',
+  description: 'Search articles, Bible studies, poetry and stories on EverRock Write.',
+  urlPath: '/search/',
+  body: `<section class="wrap search-page"><header class="article-head"><h1>Search EverRock Write</h1><p class="standfirst">Find Bible studies, poems, life stories and fiction.</p></header><form class="site-search" role="search" action="/search/" method="get"><label class="sr-only" for="site-search-input">Search writing</label><input id="site-search-input" name="q" type="search" placeholder="Search by title or keyword" autocomplete="off"><button class="btn btn-fill" type="submit">Search</button></form><p class="search-status" id="search-status" aria-live="polite"></p><div id="search-results" class="search-results"></div></section>`,
 }));
 
 /* RSS feed, sitemap, robots (only when the website address is set) */
