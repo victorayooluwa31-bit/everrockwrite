@@ -458,6 +458,25 @@ ${body}
   </div>
   <div class="wrap fine">${esc(footerCopyright)}</div>
 </footer>
+<div class="newsletter-modal" id="newsletter-modal" aria-hidden="true">
+  <div class="newsletter-backdrop" data-newsletter-close></div>
+  <section class="newsletter-dialog" role="dialog" aria-modal="true" aria-labelledby="newsletter-title" aria-describedby="newsletter-description">
+    <button class="newsletter-close" type="button" aria-label="Close newsletter signup" data-newsletter-close>&times;</button>
+    <p class="newsletter-eyebrow">EverRock Write Newsletter</p>
+    <h2 id="newsletter-title">Words worth reading, delivered to your inbox.</h2>
+    <p id="newsletter-description">Subscribe to receive new stories, poetry and reflections from EverRock Write.</p>
+    <form action="https://app.us7.list-manage.com/subscribe/post?u=503f177ec1d7f6d92466ab272&amp;id=344c631144&amp;f_id=00ccc1e1f0" method="post" target="_blank" class="newsletter-form" id="newsletter-form">
+      <label for="newsletter-email">Email address <span aria-hidden="true">*</span></label>
+      <input type="email" name="EMAIL" id="newsletter-email" required autocomplete="email" placeholder="you@example.com">
+      <label for="newsletter-name">First name</label>
+      <input type="text" name="FNAME" id="newsletter-name" autocomplete="given-name" placeholder="Your name">
+      <input type="hidden" name="tags" value="45734">
+      <div class="newsletter-honeypot" aria-hidden="true"><label for="newsletter-website">Leave this field empty</label><input type="text" name="b_503f177ec1d7f6d92466ab272_344c631144" id="newsletter-website" tabindex="-1" value=""></div>
+      <button type="submit">Subscribe</button>
+      <p class="newsletter-privacy">You can unsubscribe at any time.</p>
+    </form>
+  </section>
+</div>
 </body>
 </html>`;
 }
