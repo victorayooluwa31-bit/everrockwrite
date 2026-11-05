@@ -441,6 +441,7 @@ ${gc ? `<meta name="goatcounter" content="${gc}">\n<script data-goatcounter="htt
     <nav class="nav" id="site-nav" aria-label="Main">
       ${navHtml(current)}
     </nav>
+    <a class="header-search" href="/search/" aria-label="Search EverRock Write">Search</a>
   </div>
 </header>
 <main id="main">
@@ -829,6 +830,7 @@ for (const p of posts) {
     <header class="article-head">
       <div class="meta reveal">${catLink(p)}<time datetime="${isoDate(p.date)}">${fmtDate(p.date)}</time><span>${p.minutes} min read</span>${viewsEl(p.url)}</div>
       <h1 class="reveal">${esc(p.title)}</h1>
+      <p class="article-byline">Written by <a href="/about-the-writer/">Victor Ogunleye</a> · EverRock Write</p>
       ${p.summary ? `<p class="standfirst reveal">${esc(p.summary)}</p>` : ''}
     </header>
   </div>
@@ -870,6 +872,23 @@ write('404.html', layout({
   title: 'Page not found',
   noindex: true,
   body: `<div class="wrap"><div class="article"><header class="article-head"><h1>Page not found</h1><p class="standfirst">That link does not lead anywhere. <a href="/">Go to the home page</a>.</p></header></div></div>`,
+}));
+
+/* Search page and searchable post index */
+const searchIndex = posts.map((p) => ({
+  title: p.title,
+  summary: p.summary || '',
+  url: p.url,
+  category: p.category ? p.category.name : '',
+  date: isoDate(p.date),
+  text: p.content.replace(/<[^>]*>/g, ' ').replace(/[#*_>`]/g, ' ').replace(/\s+/g, ' ').slice(0, 5000)
+}));
+write('search-index.json', JSON.stringify(searchIndex));
+write('search/index.html', layout({
+  title: 'Search',
+  description: 'Search articles, Bible studies, poetry and stories on EverRock Write.',
+  urlPath: '/search/',
+  body: `<section class="wrap search-page"><header class="article-head"><h1>Search EverRock Write</h1><p class="standfirst">Find Bible studies, poems, life stories and fiction.</p></header><form class="site-search" role="search" action="/search/" method="get"><label class="sr-only" for="site-search-input">Search writing</label><input id="site-search-input" name="q" type="search" placeholder="Search by title or keyword" autocomplete="off"><button class="btn btn-fill" type="submit">Search</button></form><p class="search-status" id="search-status" aria-live="polite"></p><div id="search-results" class="search-results"></div></section>`,
 }));
 
 /* RSS feed, sitemap, robots (only when the website address is set) */
