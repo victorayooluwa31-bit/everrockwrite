@@ -63,7 +63,20 @@
         ]
       }
     ],
-    "social_links": [],
+    "social_links": [
+      {
+        "label": "Facebook",
+        "url": "https://web.facebook.com/profile.php?id=61595869152375"
+      },
+      {
+        "label": "WhatsApp",
+        "url": "https://wa.me/2348112293026"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:everrockwrite@gmail.com"
+      }
+    ],
     "copyright": "© {{year}} {{author}}. All rights reserved."
   },
   "hero_heading": "Words with purpose."
