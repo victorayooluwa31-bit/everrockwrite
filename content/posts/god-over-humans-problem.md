@@ -7,7 +7,8 @@ summary: "God will not reveal all the problems we might encounter at once, but
   has forgotten or deserted you. "
 tags:
   - PersonalReflection
-draft: true
+image: /uploads/heavenly-rescue-from-darkness.png
+draft: false
 ---
 I was reading some books, and one of them was based on **problems**. In that book, they explained ***problems as something that is not palatable for human beings, something that brings suffering and pain.*** They further analyzed that all problems have a solution and that everyone has a problem; it just differs from one person to another. However, there's no problem that God doesn't know. He knows everything **(Isaiah 45:7)**. He created them, but He doesn't do evil. But Satan, the only enemy humans have, causes them. Moreover, **sin** causes some problems like unemployment, sickness, death, barrenness, pain, fear, and so on.
 
