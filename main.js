@@ -3,6 +3,40 @@ window.__erReady = true;
 (function () {
   var d = document;
 
+  /* ---- Mailchimp newsletter popup ---- */
+  var newsletterModal = d.getElementById('newsletter-modal');
+  var newsletterForm = d.getElementById('newsletter-form');
+  if (newsletterModal) {
+    var newsletterKey = 'er_newsletter_signup_done_v1';
+    var newsletterDismissKey = 'er_newsletter_popup_dismissed_v1';
+    var showNewsletter = function () {
+      try {
+        if (localStorage.getItem(newsletterKey) || localStorage.getItem(newsletterDismissKey)) return;
+      } catch (e) {}
+      newsletterModal.classList.add('is-visible');
+      newsletterModal.setAttribute('aria-hidden', 'false');
+      var emailField = d.getElementById('newsletter-email');
+      if (emailField) emailField.focus();
+    };
+    var closeNewsletter = function () {
+      newsletterModal.classList.remove('is-visible');
+      newsletterModal.setAttribute('aria-hidden', 'true');
+      try { localStorage.setItem(newsletterDismissKey, '1'); } catch (e) {}
+    };
+    window.setTimeout(showNewsletter, 9000);
+    newsletterModal.querySelectorAll('[data-newsletter-close]').forEach(function (el) {
+      el.addEventListener('click', closeNewsletter);
+    });
+    d.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && newsletterModal.classList.contains('is-visible')) closeNewsletter();
+    });
+    if (newsletterForm) {
+      newsletterForm.addEventListener('submit', function () {
+        try { localStorage.setItem(newsletterKey, '1'); } catch (e) {}
+      });
+    }
+  }
+
   /* ---- Scroll reveal ---- */
   var groups = d.querySelectorAll('.stagger');
   for (var g = 0; g < groups.length; g++) {
