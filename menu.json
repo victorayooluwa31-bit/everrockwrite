@@ -1,28 +1,6 @@
 {
   "dropdowns": [
     {
-      "items": [
-        {
-          "type": "category",
-          "category": "Bible Studies"
-        },
-        {
-          "type": "category",
-          "category": "Biblical Teachings"
-        },
-        {
-          "type": "category",
-          "category": "Scripture Reflections"
-        },
-        {
-          "type": "category",
-          "category": "Christian Living",
-          "label": ""
-        }
-      ],
-      "label": "WORD FROM GOD"
-    },
-    {
       "label": "POETRY",
       "items": [
         {
