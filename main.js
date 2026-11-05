@@ -79,6 +79,39 @@ window.__erReady = true;
     else if (toggle && nav && nav.classList.contains('open')) { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
   });
 
+  /* ---- Search page ---- */
+  var searchForm = d.querySelector('.site-search');
+  var searchInput = d.getElementById('site-search-input');
+  var searchResults = d.getElementById('search-results');
+  var searchStatus = d.getElementById('search-status');
+  if (searchForm && searchInput && searchResults) {
+    var params = new URLSearchParams(location.search);
+    var initialQuery = params.get('q') || '';
+    searchInput.value = initialQuery;
+    var runSearch = function (query) {
+      var q = query.trim().toLocaleLowerCase();
+      if (!q) { searchResults.innerHTML = ''; searchStatus.textContent = 'Enter a title or keyword to search.'; return; }
+      searchStatus.textContent = 'Searching…';
+      fetch('/search-index.json').then(function (r) { if (!r.ok) throw new Error('Search index unavailable'); return r.json(); })
+        .then(function (items) {
+          var terms = q.split(/\\s+/).filter(Boolean);
+          var matches = items.map(function (item) {
+            var hay = (item.title + ' ' + item.summary + ' ' + item.category + ' ' + item.text).toLocaleLowerCase();
+            var score = terms.reduce(function (n, term) { return n + (hay.indexOf(term) >= 0 ? 1 : 0); }, 0);
+            return { item: item, score: score };
+          }).filter(function (x) { return x.score > 0; }).sort(function (a,b) { return b.score-a.score || (b.item.date||'').localeCompare(a.item.date||''); });
+          searchStatus.textContent = matches.length ? matches.length + (matches.length === 1 ? ' result found.' : ' results found.') : 'No matching writing found. Try another keyword.';
+          searchResults.innerHTML = matches.map(function (x) {
+            var item=x.item;
+            return '<article class="search-result"><div class="search-result-meta">' + [item.category,item.date].filter(Boolean).join(' · ') + '</div><h2><a href="' + item.url + '">' + escapeHtml(item.title) + '</a></h2>' + (item.summary ? '<p>' + escapeHtml(item.summary) + '</p>' : '') + '</article>';
+          }).join('');
+        }).catch(function () { searchStatus.textContent = 'Search is temporarily unavailable. Please try again later.'; });
+    };
+    function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+    searchForm.addEventListener('submit', function (e) { e.preventDefault(); var q=searchInput.value.trim(); history.replaceState(null,'','/search/' + (q ? '?q='+encodeURIComponent(q) : '')); runSearch(q); });
+    if (initialQuery) runSearch(initialQuery); else searchStatus.textContent='Enter a title or keyword to search.';
+  }
+
   /* ---- Hero background slideshow (only when more than one image) ---- */
   var heroImgs = d.querySelectorAll('.hero-bg img');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
