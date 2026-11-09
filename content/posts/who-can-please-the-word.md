@@ -8,7 +8,7 @@ summary: Days into the new year, he lost his job when his boss refused to pay
 tags:
   - LifeLesson
 image: /uploads/mango-tree-storytime-gathering.png
-draft: false
+draft: true
 ---
 The other day, I saw a question written on the back of a bus: ***“Who can please the world?”***
 
