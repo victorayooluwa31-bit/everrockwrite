@@ -105,9 +105,9 @@
     },
     {
       "type": "text",
-      "width": "Narrow",
+      "width": "Wide",
       "style": {
-        "overlay": 40,
+        "overlay": 50,
         "align": "Center",
         "spacing": "Small",
         "border_width": 0,
@@ -129,7 +129,7 @@
         }
       ],
       "text_controls": {
-        "text_font_size": "100"
+        "text_font_size": "200px"
       }
     }
   ],
