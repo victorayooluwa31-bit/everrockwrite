@@ -104,39 +104,29 @@
       }
     },
     {
-      "image_border_radius": "5px",
-      "buttons": [
-        {
-          "label": "Meet the writer",
-          "link": "/about-the-writer/",
-          "style": "Filled",
-          "bg": "#ffffff",
-          "fg": "#101d34"
-        }
-      ],
-      "body": "Every piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing and fiction.\n\nThis is a space for exploring ideas, expressing experiences and telling stories with purpose.",
-      "image_width": "400px",
-      "heading": "A Note From The Writer",
-      "alt": "Victor Ogunleye, writer and founder of EverRock Write",
-      "image_height": "450px",
-      "image_fit": "Fill",
-      "image_margin_right": "",
+      "type": "text",
+      "width": "Narrow",
       "style": {
+        "overlay": 40,
+        "align": "Center",
         "spacing": "Small",
-        "border_style": null,
-        "align": "Left",
-        "border_width": "",
-        "border_color": "#000000",
+        "border_width": 0,
+        "border_style": "Solid",
         "bg": "#101d34",
         "fg": "#ffffff"
       },
-      "image_border_color": "#ffffff",
-      "image_margin_left": "",
-      "image_border_width": 4,
-      "side": "Right",
-      "image_padding_left": "",
-      "type": "image_text",
-      "image": "/uploads/victor-ogunleye-2-.jpeg"
+      "heading": "A Note From The Writer",
+      "body": "Every piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing and fiction.\n\nThis is a space for exploring ideas, expressing experiences and telling stories with purpose.",
+      "buttons": [
+        {
+          "style": "Filled",
+          "new_tab": false,
+          "label": "Meet the writer",
+          "link": "/about-the-writer/",
+          "bg": "#ffffff",
+          "fg": "#101d34"
+        }
+      ]
     }
   ],
   "hero_text": "A home for biblical reflections, poetry, life stories and original fiction. Explore Scripture, reflect on life, and discover stories worth reading.",
