@@ -105,11 +105,11 @@
     },
     {
       "type": "text",
-      "width": "Wide",
+      "width": "Narrow",
       "style": {
-        "overlay": 50,
+        "overlay": 40,
         "align": "Center",
-        "spacing": "Small",
+        "spacing": "Medium",
         "border_width": 0,
         "border_style": "Solid",
         "bg": "#101d34",
