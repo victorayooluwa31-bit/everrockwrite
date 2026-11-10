@@ -127,7 +127,10 @@
           "bg": "#ffffff",
           "fg": "#101d34"
         }
-      ]
+      ],
+      "text_controls": {
+        "text_font_size": "100"
+      }
     }
   ],
   "hero_text": "A home for biblical reflections, poetry, life stories and original fiction. Explore Scripture, reflect on life, and discover stories worth reading.",
