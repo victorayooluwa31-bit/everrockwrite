@@ -113,7 +113,8 @@
         "border_width": 0,
         "border_style": "Solid",
         "bg": "#101d34",
-        "fg": "#ffffff"
+        "fg": "#ffffff",
+        "bg_image": "/uploads/a-quiet-road-a-window-overlooking-a-landscape-or-another-image-suggesting-reflection..png"
       },
       "heading": "A Note From The Writer",
       "body": "Every piece of writing begins somewhere: a question, a passage of Scripture, a moment in life, or an idea that refuses to remain unwritten.\n\nEverRock Write brings these thoughts together through biblical reflections, poetry, personal writing and fiction.\n\nThis is a space for exploring ideas, expressing experiences and telling stories with purpose.",
