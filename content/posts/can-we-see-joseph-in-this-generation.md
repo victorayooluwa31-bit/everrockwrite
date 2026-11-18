@@ -7,7 +7,7 @@ summary: Joseph’s story is one of faith, endurance and divine elevation. This 
 tags:
   - Bible
 image: /uploads/joseph’s-journey_-from-prison-to-promise.png
-draft: true
+draft: false
 ---
 **Read:** Genesis 37; 39–41; 45:1–8 (key verses: Genesis 39:2; 50:20)
 
